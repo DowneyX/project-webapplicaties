@@ -28,7 +28,7 @@ Install dependencies
 Start the server
 
 ```bash
-  # Use any WSGI server like NGINX, Apache or Gunicorn to serve this application. 
+  # Use any WSGI server like NGINX, Apache or Gunicorn to serve this application
   # For development purposes we use the built-in php web server
   php -s 0.0.0.0:8000 -t ./public
 ```
