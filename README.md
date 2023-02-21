@@ -31,5 +31,5 @@ make run
     
 ## Authors
 
-- [@shambuwu](https://www.github.com/shambuwu)
+- [@Shambuwu](https://www.github.com/Shambuwu)
 
