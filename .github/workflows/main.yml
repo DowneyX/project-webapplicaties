@@ -1,0 +1,7 @@
+name: test_application
+on: [pull_request, push]
+jobs:
+  test_project:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo test
