@@ -4,5 +4,6 @@ jobs:
   test_project:
     runs-on: ubuntu-latest
     steps:
-      - run: make build
+      - run: npm install
+      - run: composer install
       - run: npm run dev
