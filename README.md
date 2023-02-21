@@ -21,7 +21,7 @@ cd project-webapplicaties
 Install with make
 
 ```bash
-  make build
+make build
 ```
 
 To run the application locally
