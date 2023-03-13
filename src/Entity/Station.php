@@ -22,10 +22,10 @@ class Station
     #[ORM\Column]
     private ?float $elevation = null;
 
-    #[ORM\OneToOne(mappedBy: 'station_name', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'station', cascade: ['persist', 'remove'])]
     private ?NearestLocation $nearestLocation = null;
 
-    #[ORM\OneToOne(mappedBy: 'station_name', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'station', cascade: ['persist', 'remove'])]
     private ?Geolocation $geolocation = null;
 
     public function getId(): ?int
