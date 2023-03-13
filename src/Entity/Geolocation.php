@@ -19,7 +19,7 @@ class Geolocation
 
     #[ORM\ManyToOne(inversedBy: 'geolocations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Country $country = null;
+    private ?Country $countryCode = null;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $island = null;
@@ -66,6 +66,9 @@ class Geolocation
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $postcode = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $country = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,14 +86,14 @@ class Geolocation
         return $this;
     }
 
-    public function getCountry(): ?Country
+    public function getCountryCode(): ?Country
     {
-        return $this->country;
+        return $this->countryCode;
     }
 
-    public function setCountry(?Country $country): self
+    public function setCountryCode(?Country $countryCode): self
     {
-        $this->country = $country;
+        $this->countryCode = $countryCode;
 
         return $this;
     }
@@ -271,6 +274,18 @@ class Geolocation
     public function setPostcode(?string $postcode): self
     {
         $this->postcode = $postcode;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
 
         return $this;
     }
