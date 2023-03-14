@@ -13,13 +13,13 @@ class Country
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "id", type: "string", length: 10, nullable: false)]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\Column(length: 45)]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'country_code', targetEntity: NearestLocation::class)]
-    private Collection $nearestLocation;
+    private Collection $nearestLocations;
 
     #[ORM\OneToMany(mappedBy: 'country_code', targetEntity: Geolocation::class)]
     private Collection $geolocations;
@@ -46,14 +46,14 @@ class Country
         return $this;
     }
 
-    public function getNearestLocation(): ?NearestLocation
+    public function getNearestLocations(): ?Collection
     {
-        return $this->nearestLocation;
+        return $this->nearestLocations;
     }
 
-    public function setNearestLocation(?NearestLocation $nearestLocation): self
+    public function setNearestLocations(?Collection $nearestLocations): self
     {
-        $this->nearestLocation = $nearestLocation;
+        $this->nearestLocations = $nearestLocations;
 
         return $this;
     }

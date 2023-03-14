@@ -30,18 +30,13 @@ class NearestLocation
 
     #[ORM\ManyToOne(inversedBy: 'nearest_location')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Country $country = null;
+    private ?Country $country_code = null;
 
     #[ORM\Column]
     private ?float $longitude = null;
 
     #[ORM\Column]
     private ?float $latitude = null;
-
-    public function __construct()
-    {
-        $this->country_code = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
