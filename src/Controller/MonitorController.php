@@ -11,10 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MonitorController extends AbstractController
 {
     #[Route('/monitor', name: 'app_monitor')]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
+        $stationRepository = $entityManager->getRepository(Station::class);
+        $stations = $stationRepository->findAll();
+
         return $this->render('monitor/index.html.twig', [
             'controller_name' => 'MonitorController',
+            'stations' => $stations
         ]);
     }
 
