@@ -54,6 +54,9 @@ class Measurement
     #[ORM\OneToOne(mappedBy: 'measurement', cascade: ['persist', 'remove'])]
     private ?FaultyMeasurement $faultyMeasurement = null;
 
+    #[ORM\Column]
+    private ?float $visibility = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -216,6 +219,18 @@ class Measurement
         }
 
         $this->faultyMeasurement = $faultyMeasurement;
+
+        return $this;
+    }
+
+    public function getVisibility(): ?float
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(float $visibility): self
+    {
+        $this->visibility = $visibility;
 
         return $this;
     }
