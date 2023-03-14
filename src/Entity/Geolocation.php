@@ -74,12 +74,12 @@ class Geolocation
         return $this->id;
     }
 
-    public function getStationName(): ?Station
+    public function getStation(): ?Station
     {
         return $this->station;
     }
 
-    public function setStationName(Station $station): self
+    public function setStation(Station $station): self
     {
         $this->station = $station;
 

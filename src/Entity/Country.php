@@ -29,7 +29,7 @@ class Country
         $this->geolocations = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

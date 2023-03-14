@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StationRepository::class)]
@@ -27,6 +29,14 @@ class Station
 
     #[ORM\OneToOne(mappedBy: 'station', cascade: ['persist', 'remove'])]
     private ?Geolocation $geolocation = null;
+
+    #[ORM\OneToMany(mappedBy: 'station', targetEntity: Measurement::class)]
+    private Collection $measurements;
+
+    public function __construct()
+    {
+        $this->measurements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,11 +104,41 @@ class Station
     public function setGeolocation(Geolocation $geolocation): self
     {
         // set the owning side of the relation if necessary
-        if ($geolocation->getStationName() !== $this) {
-            $geolocation->setStationName($this);
+        if ($geolocation->getStation() !== $this) {
+            $geolocation->setStation($this);
         }
 
         $this->geolocation = $geolocation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Measurement>
+     */
+    public function getMeasurements(): Collection
+    {
+        return $this->measurements;
+    }
+
+    public function addMeasurement(Measurement $measurement): self
+    {
+        if (!$this->measurements->contains($measurement)) {
+            $this->measurements->add($measurement);
+            $measurement->setStation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimestamp(Measurement $timestamp): self
+    {
+        if ($this->timestamp->removeElement($timestamp)) {
+            // set the owning side to null (unless already changed)
+            if ($timestamp->getStation() === $this) {
+                $timestamp->setStation(null);
+            }
+        }
 
         return $this;
     }
