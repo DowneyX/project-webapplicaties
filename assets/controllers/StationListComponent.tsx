@@ -20,10 +20,9 @@ export default function (props) {
                 columns={columns}
                 rows={rows}
                 initialState={{
-                    pagination: { paginationModel: { pageSize: 5 } },
+                    pagination: { paginationModel: { pageSize: 10 } },
                 }}
                 autoHeight={true}
-                rowSelection={false}
             />
         </div>
     );

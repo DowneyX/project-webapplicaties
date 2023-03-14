@@ -15,7 +15,12 @@ class MonitorController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $geolocationRepository = $entityManager->getRepository(Geolocation::class);
-        $geolocations = $geolocationRepository->findAll();
+        $geolocations = $geolocationRepository->findBy(
+            array(),
+            array('id' => 'DESC'),
+            500,
+            0
+        );
 
         foreach ($geolocations as $geolocation) {
             $station = $geolocation->getStation();
@@ -46,6 +51,10 @@ class MonitorController extends AbstractController
             throw $this->createNotFoundException("No station found for id {$id}");
         }
 
-        return new Response("id: {$station->getId()}, latitude: {$station->getLatitude()}, longitude: {$station->getLongitude()}");
+
+        return $this->render('monitor/station.html.twig', [
+            'controller_name' => 'MonitorController',
+            'station' => $station
+        ]);
     }
 }
