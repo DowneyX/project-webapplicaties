@@ -17,4 +17,4 @@ jobs:
           extensions: iconv, json, pdo
       - run: composer install
       - run: npm install
-      - run: npm run dev
+      - run: php bin/phpunit

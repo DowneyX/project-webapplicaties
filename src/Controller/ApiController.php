@@ -50,7 +50,7 @@ class ApiController extends AbstractController
                 }
 
                 $entityManager->persist($measurement);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
