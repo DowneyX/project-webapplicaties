@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Geolocation;
 use App\Entity\Station;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,12 +14,25 @@ class MonitorController extends AbstractController
     #[Route('/monitor', name: 'app_monitor')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $stationRepository = $entityManager->getRepository(Station::class);
-        $stations = $stationRepository->findAll();
+        $geolocationRepository = $entityManager->getRepository(Geolocation::class);
+        $geolocations = $geolocationRepository->findAll();
+
+        foreach ($geolocations as $geolocation) {
+            $station = $geolocation->getStation();
+
+            $stationArray[] = [
+                "id" => $station->getId(),
+                "latitude" => $station->getLatitude(),
+                "longitude" => $station->getLongitude(),
+                "country_code" => $geolocation->getCountryCode()->getId(),
+                "city" => $geolocation->getCity(),
+                "country" => $geolocation->getCountry()
+            ];
+        }
 
         return $this->render('monitor/index.html.twig', [
             'controller_name' => 'MonitorController',
-            'stations' => $stations
+            'stations' => $stationArray
         ]);
     }
 
