@@ -19,9 +19,10 @@ class ApiController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $body = json_decode($request->getContent(), true);
+        $stationRepository = $entityManager->getRepository(Station::class);
+
         foreach ($body["WEATHERDATA"] as $data){
             try {
-                $stationRepository = $entityManager->getRepository(Station::class);
                 $station = $stationRepository->findOneBy(array("id" => $data["STN"]));
 
                 $measurement = new Measurement();
