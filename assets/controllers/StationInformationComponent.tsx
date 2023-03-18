@@ -1,14 +1,23 @@
 import * as React from 'react'
 import {Grid, Typography} from '@mui/material'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import {
-    AcUnitSharp,
-    AirSharp, CloudSharp,
-    DeviceThermostatSharp, FilterDramaSharp,
-    Grid3x3Sharp,
-    OpacitySharp,
-    QueryBuilderSharp,
-    SatelliteAltSharp, ThunderstormSharp, VisibilitySharp, WavesSharp, WindPowerSharp
-} from "@mui/icons-material";
+    faTemperatureHigh,
+    faSatelliteDish,
+    faHashtag,
+    faClock,
+    faDroplet,
+    faWind,
+    faGauge,
+    faWater,
+    faCloudShowersHeavy,
+    faSnowflake,
+    faTornado,
+    faCloudSun,
+    faEyeLowVision,
+    faCompass
+} from '@fortawesome/free-solid-svg-icons'
 export default function (props) {
     const measurement = props.measurements[0];
 
@@ -19,7 +28,7 @@ export default function (props) {
                     <Grid container spacing={0}>
                         <Grid item xs={6} sx={{ textAlign: "center" }}>
                             <Typography variant={"h6"}>
-                                ID <Grid3x3Sharp sx={{ verticalAlign:  "middle" }}/>
+                                Measurement <FontAwesomeIcon icon={faHashtag} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.id}
@@ -27,7 +36,7 @@ export default function (props) {
                         </Grid>
                         <Grid item xs={6} sx={{ textAlign: "center" }}>
                             <Typography variant={"h6"}>
-                                Station <SatelliteAltSharp sx={{ verticalAlign:  "middle" }}/>
+                                Station <FontAwesomeIcon icon={faSatelliteDish} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.station}
@@ -35,7 +44,7 @@ export default function (props) {
                         </Grid>
                         <Grid item xs={6} sx={{ textAlign: "center" }}>
                             <Typography variant={"h6"}>
-                                Timestamp <QueryBuilderSharp sx={{ verticalAlign:  "middle" }}/>
+                                Timestamp <FontAwesomeIcon icon={faClock} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.timestamp}
@@ -43,7 +52,7 @@ export default function (props) {
                         </Grid>
                         <Grid item xs={6} sx={{ textAlign: "center" }}>
                             <Typography variant={"h6"}>
-                                Temperature <DeviceThermostatSharp sx={{ verticalAlign:  "middle" }}/>
+                                Temperature <FontAwesomeIcon icon={faTemperatureHigh} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.temperature}
@@ -53,73 +62,81 @@ export default function (props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Grid container spacing={0}>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Dew Point <OpacitySharp sx={{ verticalAlign:  "middle" }}/>
+                                Dew Point <FontAwesomeIcon icon={faDroplet} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.dew_point}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Station Air Pressure <AirSharp sx={{ verticalAlign:  "middle" }}/>
+                                Air Pressure <FontAwesomeIcon icon={faSatelliteDish} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.station_air_pressure}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Sea Level Air Pressure <WavesSharp sx={{ verticalAlign:  "middle" }}/>
+                                Air Pressure <FontAwesomeIcon icon={faWater} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.sea_level_air_pressure}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Wind Speed <WindPowerSharp sx={{ verticalAlign:  "middle" }}/>
+                                Wind Speed <FontAwesomeIcon icon={faWind} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.wind_speed}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Precipitation <ThunderstormSharp sx={{ verticalAlign:  "middle" }}/>
+                                Precipitation <FontAwesomeIcon icon={faCloudShowersHeavy} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.precipitation}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Snow Depth <AcUnitSharp sx={{ verticalAlign:  "middle" }}/>
+                                Snow Depth <FontAwesomeIcon icon={faSnowflake} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.snow_depth}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                FRSHTT <FilterDramaSharp sx={{ verticalAlign:  "middle" }}/>
+                                FRSHTT <FontAwesomeIcon icon={faTornado} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.FRSHTT}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Cloud Percentage <CloudSharp sx={{ verticalAlign:  "middle" }}/>
+                                Cloud Percent <FontAwesomeIcon icon={faCloudSun} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.cloud_percentage}%
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sx={{ textAlign: "center" }}>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
                             <Typography variant={"subtitle1"}>
-                                Visibility <VisibilitySharp sx={{ verticalAlign:  "middle" }}/>
+                                Wind Direction <FontAwesomeIcon icon={faCompass} />
+                            </Typography>
+                            <Typography variant={"subtitle1"}>
+                                {measurement.wind_direction}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
+                            <Typography variant={"subtitle1"}>
+                                Visibility <FontAwesomeIcon icon={faEyeLowVision} />
                             </Typography>
                             <Typography variant={"subtitle1"}>
                                 {measurement.visibility}

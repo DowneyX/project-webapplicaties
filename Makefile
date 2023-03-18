@@ -1,6 +1,6 @@
 build:
 	npm install
-	composer install
+	composer install --no-scripts
 
 run:
 	npm run watch &

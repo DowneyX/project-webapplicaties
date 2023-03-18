@@ -71,7 +71,8 @@ class MonitorController extends AbstractController
                 "snow_depth" => $measurement->getSnowDepth(),
                 "FRSHTT" => $measurement->getFRSHTT(),
                 "cloud_percentage" => $measurement->getWindDirection(),
-                "visibility" => $measurement->getVisibility()
+                "visibility" => $measurement->getVisibility(),
+                "wind_direction" => $measurement->getWindDirection()
             ];
         }
 
