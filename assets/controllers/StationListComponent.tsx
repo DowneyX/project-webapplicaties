@@ -1,12 +1,13 @@
 import * as React from 'react'
 import {DataGrid, GridRowsProp, GridColDef} from "@mui/x-data-grid";
+import {Link} from "@mui/material";
 
 export default function (props) {
 
     const rows: GridRowsProp = props.stations
 
     const columns: GridColDef[] = [
-        {field: 'id', headerName: 'Station ID', width: 150},
+        {field: 'id', headerName: 'Station ID', width: 150, renderCell: (params) => <Link href={"monitor/" + params.value} >{params.value}</Link>},
         {field: 'longitude', headerName: 'Latitude', flex: 1},
         {field: 'latitude', headerName: 'Longitude', flex: 1},
         {field: 'country_code', headerName: 'Country Code', flex: 1},

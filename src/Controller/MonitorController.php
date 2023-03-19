@@ -44,7 +44,7 @@ class MonitorController extends AbstractController
     }
 
     #[Route('/monitor/{id}', name: 'app_monitor_station')]
-    public function showStation(EntityManagerInterface $entityManager, string $id): Response
+    public function station(EntityManagerInterface $entityManager, string $id): Response
     {
         $stationRepository = $entityManager->getRepository(Station::class);
         $station = $stationRepository->find($id);

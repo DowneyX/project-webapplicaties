@@ -1,6 +1,4 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-    <div class="stationThing">
-        <div {{ react_component("StationComponent", {"measurements": measurements, "station": station}) }} />
-    </div>
+{% block content %}
+    <div {{ react_component("StationComponent", {"measurements": measurements, "station": station}) }} />
 {% endblock %}

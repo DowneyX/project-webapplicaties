@@ -16,132 +16,128 @@ import {
     faTornado,
     faCloudSun,
     faEyeLowVision,
-    faCompass
+    faCompass, IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
+import {motion} from "framer-motion";
 export default function (props) {
     const measurement = props.measurements[0];
+
+    interface Data {
+        icon: IconDefinition,
+        name: string
+    }
+
+    interface DataInterface {
+        [key: string]: Data
+    }
+
+    const primaryData: DataInterface = {
+        "id": {
+            "icon": faHashtag,
+            "name": "ID"
+        },
+        "station": {
+            "icon": faSatelliteDish,
+            "name": "Station"
+        },
+        "timestamp": {
+            "icon": faClock,
+            "name": "Timestamp"
+        },
+        "temperature": {
+            "icon": faTemperatureHigh,
+            "name": "Temperature"
+        }
+    };
+
+    const secondaryData: DataInterface = {
+        "dew_point": {
+            "icon": faDroplet,
+            "name": "Dew Point"
+        },
+        "station_air_pressure": {
+            "icon": faSatelliteDish,
+            "name": "Air Pressure"
+        },
+        "sea_level_air_pressure": {
+            "icon": faWater,
+            "name": "Air Pressure"
+        },
+        "wind_speed": {
+            "icon": faWind,
+            "name": "Wind Speed"
+        },
+        "precipitation": {
+            "icon": faCloudShowersHeavy,
+            "name": "Precipitation"
+        },
+        "snow_depth": {
+            "icon": faSnowflake,
+            "name": "Snow Depth"
+        },
+        "FRSHTT": {
+            "icon": faTornado,
+            "name": "FRSHTT"
+        },
+        "cloud_percentage": {
+            "icon": faCloudSun,
+            "name": "Cloud Percent"
+        },
+        "wind_direction": {
+            "icon": faCompass,
+            "name": "Wind Direction"
+        },
+        "visibility": {
+            "icon": faEyeLowVision,
+            "name": "Visibility"
+        }
+    };
 
     return (
         <>
             <Grid container spacing={0}>
                 <Grid item xs={6}>
                     <Grid container spacing={0}>
-                        <Grid item xs={6} sx={{ textAlign: "center" }}>
-                            <Typography variant={"h6"}>
-                                Measurement <FontAwesomeIcon icon={faHashtag} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.id}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} sx={{ textAlign: "center" }}>
-                            <Typography variant={"h6"}>
-                                Station <FontAwesomeIcon icon={faSatelliteDish} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.station}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} sx={{ textAlign: "center" }}>
-                            <Typography variant={"h6"}>
-                                Timestamp <FontAwesomeIcon icon={faClock} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.timestamp}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} sx={{ textAlign: "center" }}>
-                            <Typography variant={"h6"}>
-                                Temperature <FontAwesomeIcon icon={faTemperatureHigh} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.temperature}
-                            </Typography>
-                        </Grid>
+                        {Object.keys(primaryData).map(x => {
+                            return (
+                                <Grid
+                                    item
+                                    xs={6}
+                                    sx={{ textAlign: "center" }}
+                                    component={motion.div}
+                                    whileHover={{ scale: 1.2 }}
+                                >
+                                    <Typography variant={"h6"}>
+                                        {primaryData[x].name} <FontAwesomeIcon icon={primaryData[x].icon} />
+                                    </Typography>
+                                    <Typography variant={"subtitle1"}>
+                                        {measurement[x]}
+                                    </Typography>
+                                </Grid>
+                            )
+                        })}
                     </Grid>
                 </Grid>
                 <Grid item xs={6}>
                     <Grid container spacing={0}>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Dew Point <FontAwesomeIcon icon={faDroplet} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.dew_point}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Air Pressure <FontAwesomeIcon icon={faSatelliteDish} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.station_air_pressure}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Air Pressure <FontAwesomeIcon icon={faWater} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.sea_level_air_pressure}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Wind Speed <FontAwesomeIcon icon={faWind} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.wind_speed}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Precipitation <FontAwesomeIcon icon={faCloudShowersHeavy} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.precipitation}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Snow Depth <FontAwesomeIcon icon={faSnowflake} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.snow_depth}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                FRSHTT <FontAwesomeIcon icon={faTornado} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.FRSHTT}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Cloud Percent <FontAwesomeIcon icon={faCloudSun} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.cloud_percentage}%
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Wind Direction <FontAwesomeIcon icon={faCompass} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.wind_direction}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2.4} sx={{ textAlign: "center" }}>
-                            <Typography variant={"subtitle1"}>
-                                Visibility <FontAwesomeIcon icon={faEyeLowVision} />
-                            </Typography>
-                            <Typography variant={"subtitle1"}>
-                                {measurement.visibility}
-                            </Typography>
-                        </Grid>
+                        {Object.keys(secondaryData).map(x => {
+                            return (
+                                <Grid
+                                    item
+                                    xs={2.4}
+                                    sx={{ textAlign: "center" }}
+                                    component={motion.div}
+                                    whileHover={{ scale: 1.2 }}
+                                >
+                                    <Typography variant={"subtitle1"}>
+                                        {secondaryData[x].name} <FontAwesomeIcon icon={secondaryData[x].icon} />
+                                    </Typography>
+                                    <Typography variant={"subtitle1"}>
+                                        {measurement[x]}
+                                    </Typography>
+                                </Grid>
+                            )
+                        })}
                     </Grid>
                 </Grid>
             </Grid>
