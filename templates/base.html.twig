@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html>
+    <style>
+        h1 {
+            text-align: center;
+            background-color: #ca2d24;
+        }
+        div {
+            text-align: center;
+            background-color: #66ace1;
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1px;
+
+        }
+        p {
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -13,10 +33,32 @@
             {{ encore_entry_script_tags("app") }}
         {% endblock %}
     </head>
-    <body>
+    <body style="background-color: #76b7e7">
         {% block body %}
             <h1>IWA Webapplicatie</h1>
-            <div {{ react_component("TestComponent", { "test": "Ik ben een component!" }) }}></div>
+{#            <img src="pictures/LogoIWA.jpg" alt="LogoIWA">#}
+{#            <div {{ react_component("TestComponent", { "test": "Ik ben een component!" }) }}></div>#}
+            <div class="homediv">
+                <h3>Welkom bij IWA!</h3>
+                <h4>Een inspirerende quote</h4>
+                <p>
+                    Het IWA heeft zich tot doel gesteld gegevens over de wereldwijde toestand van het
+                    weer te verzamelen, op te slaan en beschikbaar te stellen aan belangstellenden, zoals
+                    lokale weerdiensten, commerciële weeradviesbureaus en overige partijen die belang
+                    hebben bij weerinformatie in de breedste zin van het woord. De organisatie heeft zijn
+                    hoofdkantoor in Groningen. Deze vestigingsplaats mag opzienbarend heten, maar is
+                    het gevolg van effectief lobbywerk door de Nederlandse regering. Bovendien biedt
+                    Groningen door een uitstekende Internet-infrastructuur een belangrijke voorwaarde
+                    voor een organisatie van een dergelijke statuur.
+                </p>
+                <p>
+                    Het IWA is al vele jaren operationeel. Omdat er als partner van de VN geopereerd
+                    wordt hebben alle VN-leden toegezegd dat hun lokale weerstations hun gegevens
+                    voortaan doorseinen naar het IWA in Groningen en dat hun weerdiensten hun
+                    informatie voortaan in Groningen betrekken. Het eigendom en beheer van de lokale
+                    weerstations blijft in handen van de verschillende weerdiensten.
+                </p>
+            </div>
         {% endblock %}
     </body>
 </html>

@@ -3,7 +3,7 @@ build:
 	composer install
 
 run:
-	npm run dev
+	npm run dev --watch
 	php -S localhost:9000 -t ./public
 
 connect:
