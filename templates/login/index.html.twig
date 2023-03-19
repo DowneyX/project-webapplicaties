@@ -4,39 +4,39 @@
 
 {% block body %}
 <style>
-    .example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%; font:
-            18px/1.5 sans-serif;
-    }
-    .example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-    }
-    label {
-        margin: 5px;
-        font-weight: bold;
-        color: #0d151c;
-    }
-    input {
-        background-color: #bcdfff;
-        width: 50%;
-        padding: 12px 10px;
-        margin: 6px 0;
-        border: 1px solid;
-    }
-    button {
-        background-color: #bcdfff;
-        width: 20%;
-        padding: 12px 10px;
-        margin: 10px 0;
-        border: 1px solid;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #a9ccec;
-    }
+    /*.example-wrapper {*/
+    /*    margin: 1em auto;*/
+    /*    max-width: 800px;*/
+    /*    width: 95%; font:*/
+    /*        18px/1.5 sans-serif;*/
+    /*}*/
+    /*.example-wrapper code {*/
+    /*    background: #F5F5F5;*/
+    /*    padding: 2px 6px;*/
+    /*}*/
+    /*label {*/
+    /*    margin: 5px;*/
+    /*    font-weight: bold;*/
+    /*    color: #0d151c;*/
+    /*}*/
+    /*input {*/
+    /*    background-color: #bcdfff;*/
+    /*    width: 50%;*/
+    /*    padding: 12px 10px;*/
+    /*    margin: 6px 0;*/
+    /*    border: 1px solid;*/
+    /*}*/
+    /*button {*/
+    /*    background-color: #bcdfff;*/
+    /*    width: 20%;*/
+    /*    padding: 12px 10px;*/
+    /*    margin: 10px 0;*/
+    /*    border: 1px solid;*/
+    /*    cursor: pointer;*/
+    /*}*/
+    /*button:hover {*/
+    /*    background-color: #a9ccec;*/
+    /*}*/
 </style>
 
 {#    <div class="example-wrapper">#}
@@ -47,14 +47,17 @@
     {#        <li>Your template at <code><a href="{{ '/home/shambuwu/Workspaces/project-webapplicaties/templates/login/index.html.twig'|file_link(0) }}">templates/login/index.html.twig</a></code></li>#}
     {#    </ul>#}
 {#    </div>#}
+
     <h1>Login pagina</h1>
-    <div>
-        <h2>Login</h2>
-        <label>Emailadres</label>
-        <input type="text" placeholder="Emailadres" name="email"><br>
-        <label>Wachtwoord</label>
-        <input type="password" placeholder="Wachtwoord" name="password"><br>
-        <button type="submit">Inloggen</button>
-    </div>
+    <div {{ react_component("LoginComponent") }} style="text-align: center"></div>
+
+{#    <div>#}
+{#        <h2>Login</h2>#}
+{#        <label>Emailadres</label>#}
+{#        <input type="text" placeholder="Emailadres" name="email"><br>#}
+{#        <label>Wachtwoord</label>#}
+{#        <input type="password" placeholder="Wachtwoord" name="password"><br>#}
+{#        <button type="submit">Inloggen</button>#}
+{#    </div>#}
 
 {% endblock %}

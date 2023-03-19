@@ -5,7 +5,7 @@
             text-align: center;
             background-color: #ca2d24;
         }
-        div {
+        .pagediv {
             text-align: center;
             background-color: #66ace1;
             width: 30%;
@@ -33,12 +33,12 @@
             {{ encore_entry_script_tags("app") }}
         {% endblock %}
     </head>
-    <body style="background-color: #76b7e7">
+    <body style="background-color: #e8f5ff">
         {% block body %}
             <h1>IWA Webapplicatie</h1>
 {#            <img src="pictures/LogoIWA.jpg" alt="LogoIWA">#}
 {#            <div {{ react_component("TestComponent", { "test": "Ik ben een component!" }) }}></div>#}
-            <div class="homediv">
+            <div class="pagediv">
                 <h3>Welkom bij IWA!</h3>
                 <h4>Een inspirerende quote</h4>
                 <p>
