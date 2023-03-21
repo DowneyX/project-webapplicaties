@@ -14,8 +14,7 @@ class Measurement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'timestamp')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Station::class, inversedBy: "measurements")]
     private ?Station $station = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

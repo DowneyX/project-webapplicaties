@@ -6,35 +6,48 @@ use App\Entity\Geolocation;
 use App\Entity\Measurement;
 use App\Entity\Station;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MonitorController extends AbstractController
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     #[Route('/monitor', name: 'app_monitor')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $geolocationRepository = $entityManager->getRepository(Geolocation::class);
-        $geolocations = $geolocationRepository->findBy(
-            array(),
-            array('id' => 'DESC'),
-            500,
-            0
-        );
+        $cache = new FilesystemAdapter();
 
-        $stationArray = [];
-        foreach ($geolocations as $geolocation) {
-            $station = $geolocation->getStation();
+        if($cache->hasItem('stationArray')) {
+            $stationArray = $cache->getItem('stationArray')->get();
+        } else {
+            $geolocationRepository = $entityManager->getRepository(Geolocation::class);
+            $geolocations = $geolocationRepository->findBy(
+                array(),
+                array('id' => 'DESC'),
+                500,
+                0
+            );
 
-            $stationArray[] = [
-                "id" => $station->getId(),
-                "latitude" => $station->getLatitude(),
-                "longitude" => $station->getLongitude(),
-                "country_code" => $geolocation->getCountryCode()->getId(),
-                "city" => $geolocation->getCity(),
-                "country" => $geolocation->getCountry()
-            ];
+            $stationArray = [];
+            foreach ($geolocations as $geolocation) {
+                $station = $geolocation->getStation();
+
+                $stationArray[] = [
+                    "id" => $station->getId(),
+                    "latitude" => $station->getLatitude(),
+                    "longitude" => $station->getLongitude(),
+                    "country_code" => $geolocation->getCountryCode()->getId(),
+                    "city" => $geolocation->getCity(),
+                    "country" => $geolocation->getCountry()
+                ];
+            }
+
+            $cache->save($cache->getItem('stationArray')->set($stationArray));
         }
 
         return $this->render('monitor/index.html.twig', [
@@ -48,7 +61,7 @@ class MonitorController extends AbstractController
     {
         $stationRepository = $entityManager->getRepository(Station::class);
         $station = $stationRepository->find($id);
-        
+
         if(!$station) {
             throw $this->createNotFoundException("No station found for id {$id}");
         }
