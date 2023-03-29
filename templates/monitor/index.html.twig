@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-<div>
-    <h1>Hallo, {{ controller_name }}!</h1>
-    <div {{ react_component("StationListComponent", {"stations": stations}) }} />
-</div>
+{% block content %}
+    <div {{ react_component("StationListComponent", {"stations": stations}) }} >
+        Loading...
+    </div>
 {% endblock %}

@@ -131,12 +131,12 @@ class Station
         return $this;
     }
 
-    public function removeTimestamp(Measurement $timestamp): self
+    public function removeMeasurement(Measurement $measurement): self
     {
-        if ($this->timestamp->removeElement($timestamp)) {
+        if ($this->measurements->removeElement($measurement)) {
             // set the owning side to null (unless already changed)
-            if ($timestamp->getStation() === $this) {
-                $timestamp->setStation(null);
+            if ($measurement->getStation() === $this) {
+                $measurement->setStation(null);
             }
         }
 

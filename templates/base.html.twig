@@ -14,9 +14,13 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}
-            <h1>IWA Webapplicatie</h1>
-            <div {{ react_component("TestComponent", { "test": "Ik ben een component!" }) }}></div>
-        {% endblock %}
+        <div id="navbar">
+            <div {{ react_component("NavbarComponent", {}) }} >
+                ...Loading
+            </div>
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
     </body>
 </html>
