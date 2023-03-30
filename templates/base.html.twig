@@ -14,10 +14,8 @@
         {% endblock %}
     </head>
     <body>
-        <div id="navbar">
-            <div {{ react_component("NavbarComponent", {}) }} >
-                ...Loading
-            </div>
+        <div>
+            <div {{ react_component('NavbarComponent', {}) }} />
         </div>
         <div id="content">
             {% block content %}{% endblock %}
