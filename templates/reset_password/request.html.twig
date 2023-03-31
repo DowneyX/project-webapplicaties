@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% form_theme requestForm 'tailwind_2_layout.html.twig' %}
+
+{% block content %}
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <div class="w-2/5 mx-auto bg-gray-100 mt-10 font-space-mono">
+        <div class="px-8 py-6 text-left bg-white shadow-lg">
+            <h3 class="text-2xl font-bold text-center">Reset your password</h3>
+            {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email, {
+                widget_class: 'w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600'
+            }) }}
+            <div>
+                <small>
+                    Enter your email address and we will send you a
+                    link to reset your password.
+                </small>
+            </div>
+
+            <div class="flex items-baseline justify-between">
+                <button class="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900 btn btn-lg btn-primary" type="submit">Send password reset email</button>
+            </div>
+            {{ form_end(requestForm) }}
+        </div>
+    </div>
+{% endblock %}
