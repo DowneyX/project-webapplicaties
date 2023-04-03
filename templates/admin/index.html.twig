@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin beheer{% endblock %}
+
+{% block content %}
+    <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2 my-10">
+        <table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Email</th>
+                <th scope="col">Username</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Is verified</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <th>{{ user.getId() }}</th>
+                    <td>{{ user.getEmail() }}</td>
+                    <td>{{ user.getUsername() }}</td>
+                    <td>{{ user.getRoles()|join(', ') }}</td>
+                    <td>{{ user.isVerified() }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

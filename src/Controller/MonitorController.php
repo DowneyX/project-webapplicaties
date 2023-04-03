@@ -22,37 +22,23 @@ class MonitorController extends AbstractController
     {
         $cache = new FilesystemAdapter();
 
-        if($cache->hasItem('stationArray')) {
-            $stationArray = $cache->getItem('stationArray')->get();
+        if($cache->hasItem('geolocations')) {
+            $geolocations = $cache->getItem('geolocations')->get();
         } else {
             $geolocationRepository = $entityManager->getRepository(Geolocation::class);
             $geolocations = $geolocationRepository->findBy(
                 array(),
                 array('id' => 'DESC'),
-                500,
+                10000,
                 0
             );
 
-            $stationArray = [];
-            foreach ($geolocations as $geolocation) {
-                $station = $geolocation->getStation();
-
-                $stationArray[] = [
-                    "id" => $station->getId(),
-                    "latitude" => $station->getLatitude(),
-                    "longitude" => $station->getLongitude(),
-                    "country_code" => $geolocation->getCountryCode()->getId(),
-                    "city" => $geolocation->getCity(),
-                    "country" => $geolocation->getCountry()
-                ];
-            }
-
-            $cache->save($cache->getItem('stationArray')->set($stationArray));
+            $cache->save($cache->getItem('geolocations')->set($geolocations));
         }
 
         return $this->render('monitor/index.html.twig', [
             'controller_name' => 'MonitorController',
-            'stations' => $stationArray
+            'geolocations' => $geolocations
         ]);
     }
 

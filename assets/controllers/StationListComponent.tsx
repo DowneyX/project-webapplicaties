@@ -4,7 +4,7 @@ import {Link} from "@mui/material";
 
 export default function (props) {
 
-    const rows: GridRowsProp = props.stations
+    const rows: GridRowsProp = props.stations;
 
     const columns: GridColDef[] = [
         {field: 'id', headerName: 'Station ID', width: 150, renderCell: (params) => <Link href={"monitor/" + params.value} >{params.value}</Link>},

@@ -21,7 +21,7 @@ class Subscription
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'subscription_id', targetEntity: User::class)]
+    #[ORM\OneToMany(mappedBy: 'subscription', targetEntity: User::class)]
     private Collection $users;
 
     public function __construct()
@@ -70,7 +70,7 @@ class Subscription
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setSubscriptionId($this);
+            $user->setSubscription($this);
         }
 
         return $this;
@@ -80,11 +80,12 @@ class Subscription
     {
         if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($user->getSubscriptionId() === $this) {
-                $user->setSubscriptionId(null);
+            if ($user->getSubscription() === $this) {
+                $user->setSubscription(null);
             }
         }
 
         return $this;
     }
+
 }

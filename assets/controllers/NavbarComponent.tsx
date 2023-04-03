@@ -20,8 +20,8 @@ export default function(props) {
                         <FontAwesomeIcon icon={faHouse} />
                     </IconButton>
                     <Button color="inherit" href={"/monitor"}>Monitor</Button>
-
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" href={"/login"}>Login</Button>
+                    <Button color="inherit" href={"/logout"}>Logout</Button>
                 </Toolbar>
             </AppBar>
         </Box>
