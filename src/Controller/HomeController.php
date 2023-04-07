@@ -23,6 +23,16 @@ class HomeController extends AbstractController
 
         $measurementRepository = $em->getRepository(Measurement::class);
         $measurementCount = $measurementRepository->count([]);
+        $query = $measurementRepository
+            ->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->where('u.timestamp < :today')
+            ->andWhere('u.timestamp > :yesterday')
+            ->setParameter('today', new \DateTime())
+            ->setParameter('yesterday', (new \DateTime())->add(\DateInterval::createFromDateString('yesterday')))
+            ->getQuery();
+
+        $measurementsToday = $query->getSingleScalarResult();
 
         $geolocationRepository = $em->getRepository(Geolocation::class);
         $geolocationCount = $geolocationRepository->count([]);
@@ -54,7 +64,8 @@ class HomeController extends AbstractController
             'chart' => $chart,
             'stationCount' => $stationCount,
             'measurementCount' => $measurementCount,
-            'geolocationCount' => $geolocationCount
+            'geolocationCount' => $geolocationCount,
+            'measurementsToday' => $measurementsToday
         ]);
     }
 }

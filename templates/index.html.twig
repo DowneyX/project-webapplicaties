@@ -3,39 +3,70 @@
 {% block title %}IWA Home{% endblock %}
 
 {% block content %}
-    <div class="font-space-mono w-4/5 mx-auto">
-        <div class="flex justify-center py-10 p-14">
-            <div class="container mx-auto pr-4">
-                <div class="w-72 bg-white max-w-xs mx-auto rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform hover:scale-100">
-                    <div class="h-20 bg-red-400 flex items-center justify-between">
-                        <p class="mr-0 text-white text-lg pl-5">STATION COUNT</p>
+    <div class="w-4/5 mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8 font-space-mono">
+        <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+            <div>
+                <p class="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+                    IWA Dashboard App
+                </p>
+            </div>
+            <h2 class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+                <span class="relative inline-block">
+                    <svg viewBox="0 0 52 24" fill="currentColor"
+                         class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                        <defs>
+                            <pattern id="d5589eeb-3fca-4f01-ac3e-983224745704" x="0" y="0" width=".135" height=".30">
+                                <circle cx="1" cy="1" r=".7"></circle>
+                            </pattern>
+                        </defs>
+                        <rect fill="url(#d5589eeb-3fca-4f01-ac3e-983224745704)" width="52" height="24"></rect>
+                    </svg>
+                    <span class="relative">Welcome</span>
+                  </span>
+                {% if app.user %} {{ app.user.username }}! {% else %} to IWA! {% endif %}
+            </h2>
+            <p class="text-base text-gray-700 md:text-lg text-left">
+                The IWA has set itself the goal of collecting, storing and making available data on the global state of
+                the weather to interested parties such as local weather services,
+                commercial weather advisory agencies and other parties with an interest in weather information in the
+                broadest sense of the word.
+                The organization has its headquarters in Groningen. This location may be surprising, but it is the
+                result of effective lobbying by the Dutch government.
+                Moreover, Groningen offers an excellent Internet infrastructure, an important prerequisite for an
+                organization of such stature.
+            </p>
+        </div>
+        <div class="sm:flex sm:space-x-4">
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow transform transition-all mb-4 w-full sm:w-1/3 sm:my-8">
+                <div class="bg-white p-5">
+                    <div class="sm:flex sm:items-start">
+                        <div class="text-center sm:mt-0 sm:ml-2 sm:text-left">
+                            <h3 class="text-sm leading-6 font-medium text-gray-400">Total Stations</h3>
+                            <p class="text-3xl font-bold text-black">{{ stationCount }}</p>
+                        </div>
                     </div>
-                    <div class="flex justify-between px-5 pt-6 mb-2 text-sm text-gray-600">
-                        <p>TOTAL</p>
-                    </div>
-                    <p class="py-4 text-3xl ml-5">{{ stationCount }}</p>
                 </div>
             </div>
-            <div class="container mx-auto pr-4">
-                <div class="w-72 bg-white max-w-xs mx-auto rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform hover:scale-100">
-                    <div class="h-20 bg-blue-500 flex items-center justify-between">
-                        <p class="mr-0 text-white text-lg pl-5">MEASUREMENT COUNT</p>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow transform transition-all mb-4 w-full sm:w-1/3 sm:my-8">
+                <div class="bg-white p-5">
+                    <div class="sm:flex sm:items-start">
+                        <div class="text-center sm:mt-0 sm:ml-2 sm:text-left">
+                            <h3 class="text-sm leading-6 font-medium text-gray-400">Total Measurements</h3>
+                            <p class="text-3xl font-bold text-black">{{ measurementCount }} <span
+                                        class="align-middle bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">+{{ measurementsToday }}</span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex justify-between px-5 pt-6 mb-2 text-sm text-gray-600">
-                        <p>TOTAL</p>
-                    </div>
-                    <p class="py-4 text-3xl ml-5">{{ measurementCount }}</p>
                 </div>
             </div>
-            <div class="container mx-auto pr-4">
-                <div class="w-72 bg-white max-w-xs mx-auto rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform hover:scale-100">
-                    <div class="h-20 bg-purple-400 flex items-center justify-between">
-                        <p class="mr-0 text-white text-lg pl-5">GEOLOCATION COUNT</p>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow transform transition-all mb-4 w-full sm:w-1/3 sm:my-8">
+                <div class="bg-white p-5">
+                    <div class="sm:flex sm:items-start">
+                        <div class="text-center sm:mt-0 sm:ml-2 sm:text-left">
+                            <h3 class="text-sm leading-6 font-medium text-gray-400">Total Geolocations</h3>
+                            <p class="text-3xl font-bold text-black">{{ geolocationCount }}</p>
+                        </div>
                     </div>
-                    <div class="flex justify-between pt-6 px-5 mb-2 text-sm text-gray-600">
-                        <p>TOTAL</p>
-                    </div>
-                    <p class="py-4 text-3xl ml-5">{{ geolocationCount }}</p>
                 </div>
             </div>
         </div>

@@ -1,4 +1,50 @@
 {% extends 'base.html.twig' %}
 {% block content %}
-    <div class="w-4/5 mx-auto py-10" {{ react_component("StationComponent", {"measurements": measurements, "station": station}) }} />
+    <div class="w-11/12 mx-auto mr-3 py-10 font-space-mono">
+        <h2>
+            {{ station.getId() }}
+        </h2>
+        <table id="example" class="stripe hover text-sm" style="">
+            <thead>
+            <tr class="">
+                <th scope="col">ID</th>
+                <th scope="col">Station</th>
+                <th scope="col">Time</th>
+                <th scope="col">Temp.</th>
+                <th scope="col">Dew Point</th>
+                <th scope="col">Station Air Pressure</th>
+                <th scope="col">Sea Level Air Pressure</th>
+                <th scope="col">Wind Speed</th>
+                <th scope="col">Precip.</th>
+                <th scope="col">Snow Depth</th>
+                <th scope="col">FRSHTT</th>
+                <th scope="col">Cloud Percent.</th>
+                <th scope="col">Visibility</th>
+                <th scope="col">Wind Dir.</th>
+                <th scope="col">Faults</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for measurement in measurements %}
+                <tr class="{% if measurement.getFaults() %} !bg-red-100 hover:!bg-red-200{% endif %}">
+                    <th scope="row">{{ measurement.getId() }}</th>
+                    <td>{{ station.getId() }}</td>
+                    <td>{{ measurement.getTimestamp()|date('d/m/Y H:i:s') }}</td>
+                    <td>{{ measurement.getTemperature() }}</td>
+                    <td>{{ measurement.getDewPoint() }}</td>
+                    <td>{{ measurement.getStationAirPressure }}</td>
+                    <td>{{ measurement.getSeaLevelAirPressure() }}</td>
+                    <td>{{ measurement.getWindSpeed() }}</td>
+                    <td>{{ measurement.getPrecipitation() }}</td>
+                    <td>{{ measurement.getSnowDepth() }}</td>
+                    <td>{{ measurement.getFRSHTT() }}</td>
+                    <td>{{ measurement.getCloudPercentage() }}</td>
+                    <td>{{ measurement.getVisibility() }}</td>
+                    <td>{{ measurement.getWindDirection() }}</td>
+                    <td>{{ measurement.getFaults()|join(', ') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

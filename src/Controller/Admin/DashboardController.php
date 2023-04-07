@@ -24,14 +24,18 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Project Webapplicaties');
+            ->setTitle('Admin Dashboard')
+            ->disableDarkMode()
+            ->generateRelativeUrls();
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Users', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Stations', 'fas fa-list', Station::class);
-        yield MenuItem::linkToCrud('Geolocations', 'fas fa-list', Geolocation::class);
+        yield MenuItem::linkToUrl('Return to app', 'fa fa-home', '/');
+        yield MenuItem::subMenu('Entities', 'fa fa-bars')->setSubItems([
+            MenuItem::linkToCrud('Users', 'fas fa-list', User::class),
+            MenuItem::linkToCrud('Stations', 'fas fa-list', Station::class),
+            MenuItem::linkToCrud('Geolocations', 'fas fa-list', Geolocation::class),
+        ]);
     }
 }
