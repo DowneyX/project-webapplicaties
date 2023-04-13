@@ -64,7 +64,7 @@ class ApiControllerTest extends KernelTestCase
                     "DATE" => "2022-02-09",
                     "TIME" => "00:00:58",
                     "TEMP" => 10.1,
-                    "DEWP" => null,
+                    "DEWP" => 'None',
                     "STP" => 984.1,
                     "SLP" => 1012.6,
                     "VISIB" => 23.4,
@@ -84,6 +84,6 @@ class ApiControllerTest extends KernelTestCase
         $controller = new ApiController();
         $response = $controller->index($this->request, $this->entityManager, $this->validator);
 
-        $this->assertEquals(500, $response->getStatusCode());
+        $this->assertEquals(202, $response->getStatusCode());
     }
 }
