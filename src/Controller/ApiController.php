@@ -31,7 +31,7 @@ class ApiController extends AbstractController
                     ->setStation($station)
                     ->setTimestamp(new DateTime("{$data['DATE']} {$data['TIME']}"));
 
-                if ($data["TEMP"]) {
+                if ($data["TEMP"] != 'None') {
                     $measurement->setTemperature($data["TEMP"]);
                 } else {
                     $measurement
@@ -39,7 +39,7 @@ class ApiController extends AbstractController
                         ->addFault("temperature");
                 }
 
-                if ($data["DEWP"]) {
+                if ($data["DEWP"]  != 'None') {
                     $measurement->setDewPoint($data["DEWP"]);
                 } else {
                     $measurement
@@ -47,7 +47,7 @@ class ApiController extends AbstractController
                         ->addFault("dew_point");
                 }
 
-                if ($data["STP"]) {
+                if ($data["STP"]  != 'None') {
                     $measurement->setStationAirPressure($data["STP"]);
                 } else {
                     $measurement
@@ -55,7 +55,7 @@ class ApiController extends AbstractController
                         ->addFault("station_air_pressure");
                 }
 
-                if ($data["SLP"]) {
+                if ($data["SLP"]  != 'None') {
                     $measurement->setSeaLevelAirPressure($data["SLP"]);
                 } else {
                     $measurement
@@ -63,7 +63,7 @@ class ApiController extends AbstractController
                         ->addFault("sea_level_air_pressure");
                 }
 
-                if ($data["VISIB"]) {
+                if ($data["VISIB"]  != 'None') {
                     $measurement->setVisibility($data["VISIB"]);
                 } else {
                     $measurement
@@ -71,7 +71,7 @@ class ApiController extends AbstractController
                         ->addFault("visibility");
                 }
 
-                if ($data["WDSP"]) {
+                if ($data["WDSP"]  != 'None') {
                     $measurement->setWindSpeed($data["WDSP"]);
                 } else {
                     $measurement
@@ -79,7 +79,7 @@ class ApiController extends AbstractController
                         ->addFault("wind_speed");
                 }
 
-                if ($data["PRCP"]) {
+                if ($data["PRCP"]  != 'None') {
                     $measurement->setPrecipitation($data["PRCP"]);
                 } else {
                     $measurement
@@ -87,7 +87,7 @@ class ApiController extends AbstractController
                         ->addFault("precipitation");
                 }
 
-                if ($data["SNDP"]) {
+                if ($data["SNDP"]  != 'None') {
                     $measurement->setSnowDepth($data["SNDP"]);
                 } else {
                     $measurement
@@ -95,7 +95,7 @@ class ApiController extends AbstractController
                         ->addFault("snow_depth");
                 }
 
-                if ($data["FRSHTT"]) {
+                if ($data["FRSHTT"]  != 'None') {
                     $measurement->setFRSHTT($data["FRSHTT"]);
                 } else {
                     $measurement
@@ -103,7 +103,7 @@ class ApiController extends AbstractController
                         ->addFault("FRSHTT");
                 }
 
-                if ($data["CLDC"]) {
+                if ($data["CLDC"]  != 'None') {
                     $measurement->setCloudPercentage($data["CLDC"]);
                 } else {
                     $measurement
@@ -111,7 +111,7 @@ class ApiController extends AbstractController
                         ->addFault("cloud_percentage");
                 }
 
-                if ($data["WNDDIR"]) {
+                if ($data["WNDDIR"]  != 'None') {
                     $measurement->setWindDirection($data["WNDDIR"]);
                 } else {
                     $measurement
