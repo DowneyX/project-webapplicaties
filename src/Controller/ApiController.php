@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FaultyMeasurement;
 use App\Entity\Measurement;
 use App\Entity\Station;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,26 +29,102 @@ class ApiController extends AbstractController
                 $measurement = new Measurement();
                 $measurement
                     ->setStation($station)
-                    ->setTimestamp(new DateTime("{$data['DATE']} {$data['TIME']}"))
-                    ->setTemperature($data["TEMP"])
-                    ->setDewPoint($data["DEWP"])
-                    ->setStationAirPressure($data["STP"])
-                    ->setSeaLevelAirPressure($data["SLP"])
-                    ->setVisibility($data["VISIB"])
-                    ->setWindSpeed($data["WDSP"])
-                    ->setPrecipitation($data["PRCP"])
-                    ->setSnowDepth($data["SNDP"])
-                    ->setFRSHTT($data["FRSHTT"])
-                    ->setCloudPercentage($data["CLDC"])
-                    ->setWindDirection($data["WNDDIR"]);
+                    ->setTimestamp(new DateTime("{$data['DATE']} {$data['TIME']}"));
+
+                if ($data["TEMP"] != 'None') {
+                    $measurement->setTemperature($data["TEMP"]);
+                } else {
+                    $measurement
+                        ->setTemperature(null)
+                        ->addFault("temperature");
+                }
+
+                if ($data["DEWP"]  != 'None') {
+                    $measurement->setDewPoint($data["DEWP"]);
+                } else {
+                    $measurement
+                        ->setDewPoint(null)
+                        ->addFault("dew_point");
+                }
+
+                if ($data["STP"]  != 'None') {
+                    $measurement->setStationAirPressure($data["STP"]);
+                } else {
+                    $measurement
+                        ->setStationAirPressure(null)
+                        ->addFault("station_air_pressure");
+                }
+
+                if ($data["SLP"]  != 'None') {
+                    $measurement->setSeaLevelAirPressure($data["SLP"]);
+                } else {
+                    $measurement
+                        ->setSeaLevelAirPressure(null)
+                        ->addFault("sea_level_air_pressure");
+                }
+
+                if ($data["VISIB"]  != 'None') {
+                    $measurement->setVisibility($data["VISIB"]);
+                } else {
+                    $measurement
+                        ->setVisibility(null)
+                        ->addFault("visibility");
+                }
+
+                if ($data["WDSP"]  != 'None') {
+                    $measurement->setWindSpeed($data["WDSP"]);
+                } else {
+                    $measurement
+                        ->setWindSpeed(null)
+                        ->addFault("wind_speed");
+                }
+
+                if ($data["PRCP"]  != 'None') {
+                    $measurement->setPrecipitation($data["PRCP"]);
+                } else {
+                    $measurement
+                        ->setPrecipitation(null)
+                        ->addFault("precipitation");
+                }
+
+                if ($data["SNDP"]  != 'None') {
+                    $measurement->setSnowDepth($data["SNDP"]);
+                } else {
+                    $measurement
+                        ->setSnowDepth(null)
+                        ->addFault("snow_depth");
+                }
+
+                if ($data["FRSHTT"]  != 'None') {
+                    $measurement->setFRSHTT($data["FRSHTT"]);
+                } else {
+                    $measurement
+                        ->setFRSHTT(null)
+                        ->addFault("FRSHTT");
+                }
+
+                if ($data["CLDC"]  != 'None') {
+                    $measurement->setCloudPercentage($data["CLDC"]);
+                } else {
+                    $measurement
+                        ->setCloudPercentage($data["CLDC"])
+                        ->addFault("cloud_percentage");
+                }
+
+                if ($data["WNDDIR"]  != 'None') {
+                    $measurement->setWindDirection($data["WNDDIR"]);
+                } else {
+                    $measurement
+                        ->setWindDirection(null)
+                        ->addFault("wind_direction");
+                }
 
                 $station->addMeasurement($measurement);
 
                 $errors = $validator->validate($measurement);
                 if (count($errors) > 0) {
                     $errorString = (string) $errors;
-
-                    return new Response($errorString, Response::HTTP_INTERNAL_SERVER_ERROR);
+                    return new Response(sprintf("%s\nInserted faulty measurement", $errorString), Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
                 $entityManager->persist($measurement);

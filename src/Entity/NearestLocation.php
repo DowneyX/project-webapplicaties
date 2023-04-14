@@ -15,7 +15,7 @@ class NearestLocation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'name', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'nearestLocation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Station $station = null;
 

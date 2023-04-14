@@ -4,21 +4,25 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Lazy\LazyUuidFromString;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['uuid'], message: 'There is already an account with this uuid')]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface|null $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $uuid = null;
+    private ?string $username = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -38,19 +42,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    public function getId(): ?int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function getUuid(): ?string
+    public function getUsername(): ?string
     {
-        return $this->uuid;
+        return $this->username;
     }
 
-    public function setUuid(string $uuid): self
+    public function setUsername(string $username): self
     {
-        $this->uuid = $uuid;
+        $this->username = $username;
 
         return $this;
     }
@@ -62,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->uuid;
+        return (string) $this->username;
     }
 
     /**

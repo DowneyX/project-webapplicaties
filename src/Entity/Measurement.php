@@ -20,41 +20,44 @@ class Measurement
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $timestamp = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $temperature = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $dew_point = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $station_air_pressure = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $sea_level_air_pressure = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $wind_speed = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $precipitation = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $snow_depth = null;
 
-    #[ORM\Column(length: 6)]
+    #[ORM\Column(length: 6, nullable: true)]
     private ?string $FRSHTT = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $cloud_percentage = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $wind_direction = null;
 
     #[ORM\OneToOne(mappedBy: 'measurement', cascade: ['persist', 'remove'])]
     private ?FaultyMeasurement $faultyMeasurement = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $visibility = null;
+
+    #[ORM\Column(type: 'array', nullable: true)]
+    private ?array $faults = [];
 
     public function getId(): ?int
     {
@@ -90,7 +93,7 @@ class Measurement
         return $this->temperature;
     }
 
-    public function setTemperature(float $temperature): self
+    public function setTemperature(?float $temperature): self
     {
         $this->temperature = $temperature;
 
@@ -102,7 +105,7 @@ class Measurement
         return $this->dew_point;
     }
 
-    public function setDewPoint(float $dew_point): self
+    public function setDewPoint(?float $dew_point): self
     {
         $this->dew_point = $dew_point;
 
@@ -114,7 +117,7 @@ class Measurement
         return $this->station_air_pressure;
     }
 
-    public function setStationAirPressure(float $station_air_pressure): self
+    public function setStationAirPressure(?float $station_air_pressure): self
     {
         $this->station_air_pressure = $station_air_pressure;
 
@@ -126,7 +129,7 @@ class Measurement
         return $this->sea_level_air_pressure;
     }
 
-    public function setSeaLevelAirPressure(float $sea_level_air_pressure): self
+    public function setSeaLevelAirPressure(?float $sea_level_air_pressure): self
     {
         $this->sea_level_air_pressure = $sea_level_air_pressure;
 
@@ -138,7 +141,7 @@ class Measurement
         return $this->wind_speed;
     }
 
-    public function setWindSpeed(float $wind_speed): self
+    public function setWindSpeed(?float $wind_speed): self
     {
         $this->wind_speed = $wind_speed;
 
@@ -150,7 +153,7 @@ class Measurement
         return $this->precipitation;
     }
 
-    public function setPrecipitation(float $precipitation): self
+    public function setPrecipitation(?float $precipitation): self
     {
         $this->precipitation = $precipitation;
 
@@ -162,7 +165,7 @@ class Measurement
         return $this->snow_depth;
     }
 
-    public function setSnowDepth(float $snow_depth): self
+    public function setSnowDepth(?float $snow_depth): self
     {
         $this->snow_depth = $snow_depth;
 
@@ -174,7 +177,7 @@ class Measurement
         return $this->FRSHTT;
     }
 
-    public function setFRSHTT(string $FRSHTT): self
+    public function setFRSHTT(?string $FRSHTT): self
     {
         $this->FRSHTT = $FRSHTT;
 
@@ -186,7 +189,7 @@ class Measurement
         return $this->cloud_percentage;
     }
 
-    public function setCloudPercentage(float $cloud_percentage): self
+    public function setCloudPercentage(?float $cloud_percentage): self
     {
         $this->cloud_percentage = $cloud_percentage;
 
@@ -198,7 +201,7 @@ class Measurement
         return $this->wind_direction;
     }
 
-    public function setWindDirection(int $wind_direction): self
+    public function setWindDirection(?int $wind_direction): self
     {
         $this->wind_direction = $wind_direction;
 
@@ -227,9 +230,23 @@ class Measurement
         return $this->visibility;
     }
 
-    public function setVisibility(float $visibility): self
+    public function setVisibility(?float $visibility): self
     {
         $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    public function getFaults(): ?array
+    {
+        return $this->faults;
+    }
+
+    public function addFault(?string $fault): self
+    {
+        if (!in_array($fault, $this->faults)) {
+            $this->faults[] = $fault;
+        }
 
         return $this;
     }
