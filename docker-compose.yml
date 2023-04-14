@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      APP_DEBUG: ${APP_DEBUG:-true}
+      APP_SECRET: ${APP_SECRET}
+      MAILER_DSN: ${MAILER_DSN:-smtp://iwa.gaming@outlook.com:NsQrSZK7cq5ATN3@smtp.office365.com:587?encryption=tls}
+      DATABASE_URL: ${DATABASE_URL:-mysql://user:Admin123@127.0.0.1:3307/iwa_webapp?serverVersion=mariadb-10.11.2&charset=utf8}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+    ports:
+      - "9000:9000"
+    command: "npm run watch & && php -S 0:9000 -t ./public"
