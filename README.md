@@ -18,10 +18,16 @@ git clone https://github.com/DowneyX/project-webapplicaties.git
 cd project-webapplicaties
 ```
 
-Install with make
+Install with dependencies with make
 
 ```bash
 make build
+```
+
+Connect to remote database (if developing, please make a local database instance and migrate)
+
+```bash
+make connect
 ```
 
 To run the application locally
