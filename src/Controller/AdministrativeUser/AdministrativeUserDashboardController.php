@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\AdministrativeUser;
 
+use App\Controller\Admin\UserCrudController;
 use App\Entity\Geolocation;
 use App\Entity\Station;
 use App\Entity\User;
@@ -12,19 +13,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DashboardController extends AbstractDashboardController
+class AdministrativeUserDashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'app_admin')]
+    #[Route('/researcher-dashboard', name: 'app_research')]
     public function index(): Response
     {
-         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-         return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Admin Dashboard')
+            ->setTitle('Researcher Dashboard')
             ->disableDarkMode()
             ->generateRelativeUrls();
     }
@@ -32,10 +33,6 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToUrl('Return to app', 'fa fa-home', '/');
-        yield MenuItem::subMenu('Entities', 'fa fa-bars')->setSubItems([
-            MenuItem::linkToCrud('Users', 'fas fa-list', User::class),
-            MenuItem::linkToCrud('Stations', 'fas fa-list', Station::class),
-            MenuItem::linkToCrud('Geolocations', 'fas fa-list', Geolocation::class),
-        ]);
+        yield MenuItem::linkToCrud('Users', 'fas fa-list', UserCrudController::getEntityFqcn());
     }
 }
