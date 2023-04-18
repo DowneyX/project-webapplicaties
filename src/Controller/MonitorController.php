@@ -47,6 +47,14 @@ class MonitorController extends AbstractController
     {
         $stationRepository = $entityManager->getRepository(Station::class);
         $station = $stationRepository->findOneBy(array('id' => $id));
+        $latestMeasurement = null;
+
+        foreach ($station->getMeasurements() as $measurement) {
+            $timestamp = $measurement->getTimestamp();
+            if($latestMeasurement == null || $timestamp > $latestMeasurement->getTimestamp()){
+                $latestMeasurement = $measurement;
+            }
+        }
 
         if(!$station) {
             throw $this->createNotFoundException("No station found for id {$id}");
@@ -54,7 +62,9 @@ class MonitorController extends AbstractController
 
         return $this->render('monitor/station.html.twig', [
             'station' => $station,
-            'measurements' => $station->getMeasurements()
+            'measurements' => $station->getMeasurements(),
+            'geolocation' => $station->getGeolocation(),
+            'latestMeasurement' => $latestMeasurement
         ]);
     }
 }

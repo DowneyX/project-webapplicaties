@@ -21,6 +21,7 @@ registerReactControllerComponents(require.context('./controllers', true, /\.(j|t
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import './fontawesome/css/all.css';
 
 // start the Stimulus application
 import './bootstrap';

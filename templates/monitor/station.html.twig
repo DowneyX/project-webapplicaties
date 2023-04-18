@@ -1,50 +1,155 @@
 {% extends 'base.html.twig' %}
 {% block content %}
-    <div class="w-11/12 mx-auto mr-3 py-10 font-space-mono">
-        <h2>
-            {{ station.getId() }}
-        </h2>
-        <table id="example" class="stripe hover text-sm" style="">
-            <thead>
-            <tr class="">
-                <th scope="col">ID</th>
-                <th scope="col">Station</th>
-                <th scope="col">Time</th>
-                <th scope="col">Temp.</th>
-                <th scope="col">Dew Point</th>
-                <th scope="col">Station Air Pressure</th>
-                <th scope="col">Sea Level Air Pressure</th>
-                <th scope="col">Wind Speed</th>
-                <th scope="col">Precip.</th>
-                <th scope="col">Snow Depth</th>
-                <th scope="col">FRSHTT</th>
-                <th scope="col">Cloud Percent.</th>
-                <th scope="col">Visibility</th>
-                <th scope="col">Wind Dir.</th>
-                <th scope="col">Faults</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for measurement in measurements %}
-                <tr class="{% if measurement.getFaults() %} !bg-red-100 hover:!bg-red-200{% endif %}">
-                    <th scope="row">{{ measurement.getId() }}</th>
-                    <td>{{ station.getId() }}</td>
-                    <td>{{ measurement.getTimestamp()|date('d/m/Y H:i:s') }}</td>
-                    <td>{{ measurement.getTemperature() }}</td>
-                    <td>{{ measurement.getDewPoint() }}</td>
-                    <td>{{ measurement.getStationAirPressure }}</td>
-                    <td>{{ measurement.getSeaLevelAirPressure() }}</td>
-                    <td>{{ measurement.getWindSpeed() }}</td>
-                    <td>{{ measurement.getPrecipitation() }}</td>
-                    <td>{{ measurement.getSnowDepth() }}</td>
-                    <td>{{ measurement.getFRSHTT() }}</td>
-                    <td>{{ measurement.getCloudPercentage() }}</td>
-                    <td>{{ measurement.getVisibility() }}</td>
-                    <td>{{ measurement.getWindDirection() }}</td>
-                    <td>{{ measurement.getFaults()|join(', ') }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+	<div class="w-11/12 mx-auto mr-3 py-10 font-space-mono">
+		<div class="my-5 bg-gray-100 p-5">
+			<h2 class=" text-xl  ">
+				Station:
+				{{ station.getId() }}
+			</h2>
+			<div class="grid grid-cols-2 py-5">
+				<div>
+					<h4 class=" font-bold">Location:</h4>
+					<p>elevation:
+						{{station.getElevation()}}</p>
+					<p>latitude:
+						{{station.getLatitude()}}</p>
+					<p>longitude:
+						{{station.getLongitude()}}</p>
+
+					<br>
+
+					<p>country:
+						{{geolocation.getCountry()}}</p>
+					<p>state:
+						{{geolocation.getState()}}</p>
+					<p>city:
+						{{geolocation.getCity()}}</p>
+					<p>postal code:
+						{{geolocation.getPostCode()}}</p>
+
+					<br>
+
+					<h4 class=" font-bold">Status:</h4>
+					<p>
+						active
+					</p>
+
+				</div>
+				<div>
+					<h4 class=" font-bold">Latest measurement:</h4>
+					<div class="my-2 grid grid-cols-2 bg-white p-2">
+						{% if latestMeasurement != null %}
+							<p>
+								<i class="fa-duotone fa-calendar-days"></i>
+								Time stamp:</p>
+							<p>
+								{{ latestMeasurement.getTimestamp()|date('d/m/Y H:i:s') }}</p>
+							<p>
+								<i class="fa-duotone fa-temperature-list"></i>
+								Temperature:</p>
+							<p>
+								{{ latestMeasurement.getTemperature() }}</p>
+							<p>
+								<i class="fa-duotone fa-droplet-degree"></i>
+								Dew Point:</p>
+							<p>
+								{{ latestMeasurement.getDewPoint() }}</p>
+							<p>
+								<i class="fa-duotone fa-gauge"></i>
+								Station air pressure:</p>
+							<p>
+								{{ latestMeasurement.getStationAirPressure }}</p>
+							<p>
+								<i class="fa-duotone fa-gauge"></i>
+								Sea level air pressure:</p>
+							<p>
+								{{ latestMeasurement.getSeaLevelAirPressure() }}</p>
+							<p>
+								<i class="fa-duotone fa-wind"></i>
+								Wind speed:</p>
+							<p>
+								{{ latestMeasurement.getWindSpeed() }}</p>
+							<p>
+								<i class="fa-duotone fa-raindrops"></i>
+								Precipitation:
+							</p>
+							<p>
+								{{ latestMeasurement.getPrecipitation() }}</p>
+							<p>
+								<i class="fa-duotone fa-snowflake-droplets"></i>
+								Snow depth:</p>
+							<p>
+								{{ latestMeasurement.getSnowDepth() }}</p>
+							<p>
+								<i class="fa-duotone fa-hurricane"></i>
+								FRSHTT:</p>
+							<p>
+								{{ latestMeasurement.getFRSHTT() }}</p>
+							<p>
+								<i class="fa-duotone fa-clouds-sun"></i>
+								Cloud cover %:</p>
+							<p>
+								{{ latestMeasurement.getCloudPercentage() }}</p>
+							<p>
+								<i class="fa-duotone fa-eye-low-vision"></i>
+								Visibility %:</p>
+							<p>
+								{{ latestMeasurement.getVisibility() }}</p>
+							<p>
+								<i class="fa-duotone fa-compass"></i>
+								Wind direction:</p>
+							<p>
+								{{ latestMeasurement.getWindDirection() }}</p>
+						{% else %}
+							<p>
+								No measurements for this station</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<table id="example" class="stripe hover text-sm" style="">
+			<thead>
+				<tr class="">
+					<th scope="col">ID</th>
+					<th scope="col">Station</th>
+					<th scope="col">Time</th>
+					<th scope="col">Temp.</th>
+					<th scope="col">Dew Point</th>
+					<th scope="col">Station Air Pressure</th>
+					<th scope="col">Sea Level Air Pressure</th>
+					<th scope="col">Wind Speed</th>
+					<th scope="col">Precip.</th>
+					<th scope="col">Snow Depth</th>
+					<th scope="col">FRSHTT</th>
+					<th scope="col">Cloud Percent.</th>
+					<th scope="col">Visibility</th>
+					<th scope="col">Wind Dir.</th>
+					<th scope="col">Faults</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for measurement in measurements %}
+					<tr class="{% if measurement.getFaults() %} !bg-red-100 hover:!bg-red-200{% endif %}">
+						<th scope="row">{{ measurement.getId() }}</th>
+						<td>{{ station.getId() }}</td>
+						<td>{{ measurement.getTimestamp()|date('d/m/Y H:i:s') }}</td>
+						<td>{{ measurement.getTemperature() }}</td>
+						<td>{{ measurement.getDewPoint() }}</td>
+						<td>{{ measurement.getStationAirPressure }}</td>
+						<td>{{ measurement.getSeaLevelAirPressure() }}</td>
+						<td>{{ measurement.getWindSpeed() }}</td>
+						<td>{{ measurement.getPrecipitation() }}</td>
+						<td>{{ measurement.getSnowDepth() }}</td>
+						<td>{{ measurement.getFRSHTT() }}</td>
+						<td>{{ measurement.getCloudPercentage() }}</td>
+						<td>{{ measurement.getVisibility() }}</td>
+						<td>{{ measurement.getWindDirection() }}</td>
+						<td>{{ measurement.getFaults()|join(', ') }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 {% endblock %}
