@@ -2,6 +2,8 @@
 
 namespace App\Controller\AdministrativeUser;
 
+use App\Controller\Admin\ContractCrudController;
+use App\Controller\Admin\SubscriptionCrudController;
 use App\Controller\Admin\UserCrudController;
 use App\Entity\Geolocation;
 use App\Entity\Station;
@@ -15,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdministrativeUserDashboardController extends AbstractDashboardController
 {
-    #[Route('/researcher-dashboard', name: 'app_research')]
+    #[Route('/administrative-dashboard', name: 'app_administrative_user')]
     public function index(): Response
     {
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
@@ -25,7 +27,7 @@ class AdministrativeUserDashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Researcher Dashboard')
+            ->setTitle('Administrative User Dashboard')
             ->disableDarkMode()
             ->generateRelativeUrls();
     }
@@ -34,5 +36,7 @@ class AdministrativeUserDashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToUrl('Return to app', 'fa fa-home', '/');
         yield MenuItem::linkToCrud('Users', 'fas fa-list', UserCrudController::getEntityFqcn());
+        yield MenuItem::linkToCrud('Subscriptions', 'fas fa-list', SubscriptionCrudController::getEntityFqcn());
+        yield MenuItem::linkToCrud('Contracts', 'fas fa-list', ContractCrudController::getEntityFqcn());
     }
 }

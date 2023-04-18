@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Station;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[isGranted("ROLE_ADMIN")]
 class StationCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
