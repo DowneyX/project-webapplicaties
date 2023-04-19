@@ -2,16 +2,14 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Station;
+use App\Entity\Contract;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[isGranted("ROLE_ADMIN")]
-class StationCrudController extends AbstractCrudController
+class ContractCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Station::class;
+        return Contract::class;
     }
 
     /*

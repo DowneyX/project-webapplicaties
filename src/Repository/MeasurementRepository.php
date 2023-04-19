@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Measurement;
+use App\Entity\Station;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +40,26 @@ class MeasurementRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function findByCurrentWeek(Station $station): array
+    {
+        $query = $this
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.station = :station')
+            ->setParameter('station', $station->getId())
+            ->andWhere('u.timestamp >= :start')
+            ->andWhere('u.timestamp <= :end')
+            ->setParameter('start', date("Y-m-d", strtotime('monday this week')))
+            ->setParameter('end', date("Y-m-d", strtotime('sunday this week')))
+            ->getQuery();
+
+        return $query->getResult();
     }
 
 //    /**

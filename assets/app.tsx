@@ -19,8 +19,8 @@ import { registerReactControllerComponents } from '@symfony/ux-react';
 // they are not necessary.
 registerReactControllerComponents(require.context('./controllers', true, /\.(j|t)sx?$/));
 
-// any CSS you import will output into a single css file (app.scss in this case)
-import './styles/app.scss';
+// any CSS you import will output into a single css file (app.css in this case)
+import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';

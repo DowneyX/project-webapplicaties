@@ -31,11 +31,12 @@ class Station
     private ?Geolocation $geolocation = null;
 
     #[ORM\OneToMany(mappedBy: 'station', targetEntity: Measurement::class)]
-    private Collection $measurements;
+    private ?Collection $measurements;
 
     public function __construct()
     {
         $this->measurements = new ArrayCollection();
+        $this->contracts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,5 +142,10 @@ class Station
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 }
