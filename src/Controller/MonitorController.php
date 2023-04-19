@@ -79,6 +79,14 @@ class MonitorController extends AbstractController
         $stationRepository = $entityManager->getRepository(Station::class);
         $measurementRepository = $entityManager->getRepository(Measurement::class);
         $station = $stationRepository->findOneBy(array('id' => $id));
+        $latestMeasurement = null;
+
+        foreach ($station->getMeasurements() as $measurement) {
+            $timestamp = $measurement->getTimestamp();
+            if($latestMeasurement == null || $timestamp > $latestMeasurement->getTimestamp()){
+                $latestMeasurement = $measurement;
+            }
+        }
 
 
         if(!$station) {
@@ -93,10 +101,10 @@ class MonitorController extends AbstractController
 
         return $this->render('monitor/station.html.twig', [
             'station' => $station,
-            'measurements' => $measurements,
-            'geolocation' => $station->getGeolocation(),
-            'latestMeasurement' => $measurements ? $measurements[sizeof($measurements) - 1] : null,
             'subscriptionType' => $subscriptionType ?: "admin",
+            'measurements' => $station->getMeasurements(),
+            'geolocation' => $station->getGeolocation(),
+            'latestMeasurement' => $latestMeasurement
         ]);
     }
 }
