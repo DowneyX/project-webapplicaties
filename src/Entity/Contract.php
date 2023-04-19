@@ -18,22 +18,22 @@ class Contract
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'contracts')]
     private Collection $user;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $min_latitude = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $max_latitude = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $min_longitude = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $max_longitude = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $min_elevation = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?float $max_elevation = null;
 
     #[ORM\Column(length: 255)]

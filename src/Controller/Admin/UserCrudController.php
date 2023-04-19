@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -44,7 +45,9 @@ class UserCrudController extends AbstractCrudController
                 EmailField::new('email'),
                 ArrayField::new('roles'),
                 AssociationField::new('subscriptions', "Subscriptions"),
-                AssociationField::new('contracts', "Contracts"),
+                AssociationField::new('contracts', "Contracts")
+                    ->setFormTypeOption('choice_label', 'name')
+                    ->setFormTypeOption('by_reference', false),
                 BooleanField::new('is_verified')
             ];
         } else {

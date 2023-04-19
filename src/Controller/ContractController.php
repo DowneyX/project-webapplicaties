@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Measurement;
+use App\Entity\Station;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +17,11 @@ class ContractController extends AbstractController
     #[Route('/contract', name: 'app_contract')]
     public function index(UserInterface $user, EntityManagerInterface $em): Response
     {
-        $measurementRepository = $em->getRepository(Measurement::class);
-        $measurements = [];
+        $stationRepository = $em->getRepository(Station::class);
+        $stationList = [];
 
         foreach ($user->getContracts() as $contract) {
-            $query = $measurementRepository
+            $query = $stationRepository
                 ->createQueryBuilder('u')
                 ->select('u');
 
@@ -48,12 +49,12 @@ class ContractController extends AbstractController
                     ->setParameter('max_elevation', $contract->getMaxElevation());
             }
 
-            $measurements[] = $query->getQuery()->getResult();
+            $stationList[] = $query->getQuery()->getResult();
         }
 
         return $this->render('contract/index.html.twig', [
             'contracts' => $user->getContracts(),
-            'measurementList' => $measurements,
+            'stationList' => $stationList,
         ]);
     }
 }
