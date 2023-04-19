@@ -38,18 +38,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 64)]
     private ?string $email = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Subscription $subscription = null;
-
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
     #[ORM\ManyToMany(targetEntity: Contract::class, mappedBy: 'user')]
     private Collection $contracts;
 
+    #[ORM\ManyToMany(targetEntity: Subscription::class, inversedBy: 'users')]
+    private Collection $subscriptions;
+
     public function __construct()
     {
         $this->contracts = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -134,18 +135,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSubscription(): ?Subscription
-    {
-        return $this->subscription;
-    }
-
-    public function setSubscription(?Subscription $subscription): self
-    {
-        $this->subscription = $subscription;
-
-        return $this;
-    }
-
     public function isVerified(): bool
     {
         return $this->isVerified;
@@ -181,6 +170,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->contracts->removeElement($contract)) {
             $contract->removeUser($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): self
+    {
+        $this->subscriptions->removeElement($subscription);
 
         return $this;
     }

@@ -17,12 +17,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[isGranted("ROLE_ADMINISTRATIVE_USER")]
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private Security $security
+    )
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -30,20 +37,20 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        if(in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+        if($this->security->isGranted('ROLE_ADMIN')) {
             return [
                 TextField::new('username'),
-                TextField::new('password')->setFormType(PasswordType::class)->onlyWhenCreating()->onlyWhenUpdating(),
+                TextField::new('password')->setFormType(PasswordType::class)->hideOnIndex()->hideWhenUpdating(),
                 EmailField::new('email'),
                 ArrayField::new('roles'),
-                AssociationField::new('subscription', "Subscription"),
+                AssociationField::new('subscriptions', "Subscriptions"),
                 AssociationField::new('contracts', "Contracts"),
                 BooleanField::new('is_verified')
             ];
         } else {
             return [
                 TextField::new('username'),
-                AssociationField::new('subscription', "Subscription"),
+                AssociationField::new('subscriptions', "Subscriptions"),
                 AssociationField::new('contracts', "Contracts"),
             ];
         }

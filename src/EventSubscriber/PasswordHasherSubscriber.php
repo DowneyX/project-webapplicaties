@@ -25,6 +25,10 @@ class PasswordHasherSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if(!$this->userPasswordHasher->needsRehash($user)) {
+            return;
+        }
+
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
                 $user,
@@ -38,6 +42,10 @@ class PasswordHasherSubscriber implements EventSubscriberInterface
         $user = $event->getEntityInstance();
 
         if(!($user instanceof User)) {
+            return;
+        }
+
+        if(!$this->userPasswordHasher->needsRehash($user)) {
             return;
         }
 

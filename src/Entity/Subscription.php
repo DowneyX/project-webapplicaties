@@ -15,13 +15,18 @@ class Subscription
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 45)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Station $station = null;
 
-    #[ORM\OneToMany(mappedBy: 'subscription', targetEntity: User::class)]
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?SubscriptionType $subscription_type = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'subscriptions')]
     private Collection $users;
 
     public function __construct()
@@ -46,14 +51,26 @@ class Subscription
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getStation(): ?Station
     {
-        return $this->description;
+        return $this->station;
     }
 
-    public function setDescription(?string $description): self
+    public function setStation(?Station $station): self
     {
-        $this->description = $description;
+        $this->station = $station;
+
+        return $this;
+    }
+
+    public function getSubscriptionType(): ?SubscriptionType
+    {
+        return $this->subscription_type;
+    }
+
+    public function setSubscriptionType(?SubscriptionType $subscription_type): self
+    {
+        $this->subscription_type = $subscription_type;
 
         return $this;
     }
@@ -70,7 +87,7 @@ class Subscription
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setSubscription($this);
+            $user->addSubscription($this);
         }
 
         return $this;
@@ -79,10 +96,7 @@ class Subscription
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getSubscription() === $this) {
-                $user->setSubscription(null);
-            }
+            $user->removeSubscription($this);
         }
 
         return $this;
