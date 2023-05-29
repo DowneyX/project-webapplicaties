@@ -7,11 +7,13 @@ use App\Entity\Measurement;
 use App\Entity\Station;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsSuccessful;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Entity\Contract;
 use DateTime;
 
 class ApiController extends AbstractController
@@ -136,5 +138,96 @@ class ApiController extends AbstractController
         $entityManager->flush();
 
         return new Response("Successfully inserted weather data", Response::HTTP_ACCEPTED);
+    }
+
+    #[Route('/api/contract/{id}/stations', name: 'app_api_contract_stations', methods: ['GET'])]
+    public function contract(Request $request,  EntityManagerInterface $entityManager, int $id): Response
+    {
+        $contractRepository = $entityManager->getRepository(Contract::class);
+        $stationRepository = $entityManager->getRepository(Station::class);
+
+        $contract = $contractRepository->find($id);
+
+        $stationRepository = $entityManager->getRepository(Station::class);
+        $stationList = [];
+
+        $query = $stationRepository
+            ->createQueryBuilder('u')
+            ->select('u');
+        if($contract->getMinLatitude() !== null && $contract->getMaxLatitude() !== null) 
+        {
+            $query = $query
+                ->andWhere('u.latitude > :min_latitude')
+                ->setParameter('min_latitude', $contract->getMinLatitude())
+                ->andWhere('u.latitude < :max_latitude')
+                ->setParameter('max_latitude', $contract->getMaxLatitude());
+        }
+        if($contract->getMinLongitude() !== null && $contract->getMaxLongitude() !== null) 
+        {
+            $query = $query
+                ->andWhere('u.longitude > :min_longitude')
+                ->setParameter('min_longitude', $contract->getMinLongitude())
+                ->andWhere('u.longitude < :max_longitude')
+                ->setParameter('max_longitude', $contract->getMaxLongitude());
+        }
+        if($contract->getMinElevation() !== null && $contract->getMaxElevation() !== null) 
+        {
+            $query = $query
+                ->andWhere('u.elevation > :min_elevation')
+                ->setParameter('min_elevation', $contract->getMinElevation())
+                ->andWhere('u.elevation < :max_elevation')
+                ->setParameter('max_elevation', $contract->getMaxElevation());
+        }
+        $stationList = $query->getQuery()->getResult();
+
+        $jsonArr = array();
+        foreach ($stationList as $key => $value) {
+            array_push($jsonArr, array('stationId' => $value->getId(), 
+                                    'longitude' => $value->getLongitude(), 
+                                    'latitude' => $value->getLatitude()));
+        }
+        $json = json_encode($jsonArr);
+        return new JsonResponse($json, 200, [], true );
+    }
+
+    #[Route('/api/station/{id}', name: 'app_api_station', methods: ['GET'])]
+    public function contractStation(Request $request,  EntityManagerInterface $entityManager, int $id,)
+    {
+        $stationRepository = $entityManager->getRepository(Station::class);
+        $station = $stationRepository->findOneBy(array('id' => $id));
+        $latestMeasurement = null;
+
+        foreach ($station->getMeasurements() as $measurement) {
+            $timestamp = $measurement->getTimestamp();
+            if($latestMeasurement == null || $timestamp > $latestMeasurement->getTimestamp()){
+                $latestMeasurement = $measurement;
+            }
+        }
+
+        $jsonArr = 
+            [   
+                "station" => [
+                    "stationId" => $station->getId(),
+                    "longitude" => $station->getLongitude(),
+                    "latitude" => $station->getLatitude(),
+                    "measurement" => [
+                        "DATE" => $latestMeasurement->getTimestamp()->format('d-m-y'),
+                        "TIME"=> $latestMeasurement->getTimestamp()->format('H:i:s'),
+                        "TEMP" => $latestMeasurement->getTemperature(),
+                        "DEWP" => $latestMeasurement->getTemperature(),
+                        "STP" => $latestMeasurement->getStationAirPressure(),
+                        "SLP" => $latestMeasurement->getSeaLevelAirPressure(),
+                        "VISIB" => $latestMeasurement->getVisibility(),
+                        "WDSP" => $latestMeasurement->getWindSpeed(),
+                        "PRCP" => $latestMeasurement->getPrecipitation(),
+                        "SNDP" => $latestMeasurement->getSnowDepth(),
+                        "FRSHTT" => $latestMeasurement->getFRSHTT(),
+                        "CLDC" => $latestMeasurement->getCloudPercentage(),
+                        "WNDDIR" => $latestMeasurement->getWindDirection()
+                    ]
+                ]
+            ];
+        $json = json_encode($jsonArr);
+        return new JsonResponse($json, 200, [], true );
     }
 }
