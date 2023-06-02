@@ -19,22 +19,13 @@ class Contract
     private Collection $user;
 
     #[ORM\Column(nullable: false)]
-    private ?float $min_latitude = null;
+    private ?string $api_key = null;
 
-    #[ORM\Column(nullable: false)]
-    private ?float $max_latitude = null;
+    #[ORM\Column(nullable: false, length: 4000)]
+    private ?string $query_stations = null;
 
-    #[ORM\Column(nullable: false)]
-    private ?float $min_longitude = null;
-
-    #[ORM\Column(nullable: false)]
-    private ?float $max_longitude = null;
-
-    #[ORM\Column(nullable: false)]
-    private ?float $min_elevation = null;
-
-    #[ORM\Column(nullable: false)]
-    private ?float $max_elevation = null;
+    #[ORM\Column(nullable: false, length: 4000)]
+    private ?string $query_measurments = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -73,78 +64,6 @@ class Contract
         return $this;
     }
 
-    public function getMinLatitude(): ?float
-    {
-        return $this->min_latitude;
-    }
-
-    public function setMinLatitude(?float $min_latitude): self
-    {
-        $this->min_latitude = $min_latitude;
-
-        return $this;
-    }
-
-    public function getMaxLatitude(): ?float
-    {
-        return $this->max_latitude;
-    }
-
-    public function setMaxLatitude(?float $max_latitude): self
-    {
-        $this->max_latitude = $max_latitude;
-
-        return $this;
-    }
-
-    public function getMinLongitude(): ?float
-    {
-        return $this->min_longitude;
-    }
-
-    public function setMinLongitude(?float $min_longitude): self
-    {
-        $this->min_longitude = $min_longitude;
-
-        return $this;
-    }
-
-    public function getMaxLongitude(): ?float
-    {
-        return $this->max_longitude;
-    }
-
-    public function setMaxLongitude(?float $max_longitude): self
-    {
-        $this->max_longitude = $max_longitude;
-
-        return $this;
-    }
-
-    public function getMinElevation(): ?float
-    {
-        return $this->min_elevation;
-    }
-
-    public function setMinElevation(?float $min_elevation): self
-    {
-        $this->min_elevation = $min_elevation;
-
-        return $this;
-    }
-
-    public function getMaxElevation(): ?float
-    {
-        return $this->max_elevation;
-    }
-
-    public function setMaxElevation(?float $max_elevation): self
-    {
-        $this->max_elevation = $max_elevation;
-
-        return $this;
-    }
-
     public function __toString(): string
     {
         return $this->name;
@@ -158,6 +77,40 @@ class Contract
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getQueryStations(): ?string
+    {
+        return $this->query_stations;
+    }
+
+    public function setQueryStations(string $query): self
+    {
+        $this->query_stations = $query;
+        return $this;
+    }
+
+    public function getQueryMeasurments(): ?string
+    {
+        return $this->query_measurments;
+    }
+
+    public function setQueryMeasurments(string $query): self
+    {
+        $this->query_measurments = $query;
+        return $this;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->api_key;
+    }
+
+    public function setApiKey(string $name): self
+    {
+        $this->api_key = hash('sha512', $name);
 
         return $this;
     }

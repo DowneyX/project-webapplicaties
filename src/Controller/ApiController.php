@@ -24,7 +24,7 @@ class ApiController extends AbstractController
         $body = json_decode($request->getContent(), true);
         $stationRepository = $entityManager->getRepository(Station::class);
 
-        foreach ($body["WEATHERDATA"] as $data){
+        foreach ($body["WEATHERDATA"] as $data) {
             try {
                 $station = $stationRepository->findOneBy(array("id" => $data["STN"]));
 
@@ -41,7 +41,7 @@ class ApiController extends AbstractController
                         ->addFault("temperature");
                 }
 
-                if ($data["DEWP"]  != 'None') {
+                if ($data["DEWP"] != 'None') {
                     $measurement->setDewPoint($data["DEWP"]);
                 } else {
                     $measurement
@@ -49,7 +49,7 @@ class ApiController extends AbstractController
                         ->addFault("dew_point");
                 }
 
-                if ($data["STP"]  != 'None') {
+                if ($data["STP"] != 'None') {
                     $measurement->setStationAirPressure($data["STP"]);
                 } else {
                     $measurement
@@ -57,7 +57,7 @@ class ApiController extends AbstractController
                         ->addFault("station_air_pressure");
                 }
 
-                if ($data["SLP"]  != 'None') {
+                if ($data["SLP"] != 'None') {
                     $measurement->setSeaLevelAirPressure($data["SLP"]);
                 } else {
                     $measurement
@@ -65,7 +65,7 @@ class ApiController extends AbstractController
                         ->addFault("sea_level_air_pressure");
                 }
 
-                if ($data["VISIB"]  != 'None') {
+                if ($data["VISIB"] != 'None') {
                     $measurement->setVisibility($data["VISIB"]);
                 } else {
                     $measurement
@@ -73,7 +73,7 @@ class ApiController extends AbstractController
                         ->addFault("visibility");
                 }
 
-                if ($data["WDSP"]  != 'None') {
+                if ($data["WDSP"] != 'None') {
                     $measurement->setWindSpeed($data["WDSP"]);
                 } else {
                     $measurement
@@ -81,7 +81,7 @@ class ApiController extends AbstractController
                         ->addFault("wind_speed");
                 }
 
-                if ($data["PRCP"]  != 'None') {
+                if ($data["PRCP"] != 'None') {
                     $measurement->setPrecipitation($data["PRCP"]);
                 } else {
                     $measurement
@@ -89,7 +89,7 @@ class ApiController extends AbstractController
                         ->addFault("precipitation");
                 }
 
-                if ($data["SNDP"]  != 'None') {
+                if ($data["SNDP"] != 'None') {
                     $measurement->setSnowDepth($data["SNDP"]);
                 } else {
                     $measurement
@@ -97,7 +97,7 @@ class ApiController extends AbstractController
                         ->addFault("snow_depth");
                 }
 
-                if ($data["FRSHTT"]  != 'None') {
+                if ($data["FRSHTT"] != 'None') {
                     $measurement->setFRSHTT($data["FRSHTT"]);
                 } else {
                     $measurement
@@ -105,7 +105,7 @@ class ApiController extends AbstractController
                         ->addFault("FRSHTT");
                 }
 
-                if ($data["CLDC"]  != 'None') {
+                if ($data["CLDC"] != 'None') {
                     $measurement->setCloudPercentage($data["CLDC"]);
                 } else {
                     $measurement
@@ -113,7 +113,7 @@ class ApiController extends AbstractController
                         ->addFault("cloud_percentage");
                 }
 
-                if ($data["WNDDIR"]  != 'None') {
+                if ($data["WNDDIR"] != 'None') {
                     $measurement->setWindDirection($data["WNDDIR"]);
                 } else {
                     $measurement
@@ -140,94 +140,45 @@ class ApiController extends AbstractController
         return new Response("Successfully inserted weather data", Response::HTTP_ACCEPTED);
     }
 
-    #[Route('/api/contract/{id}/stations', name: 'app_api_contract_stations', methods: ['GET'])]
-    public function contract(Request $request,  EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/api/contract/stations', name: 'app_api_contract_stations', methods: ['GET'])]
+    public function contract(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $auth = $request->headers->get("API-key");
+
         $contractRepository = $entityManager->getRepository(Contract::class);
-        $stationRepository = $entityManager->getRepository(Station::class);
+        $contract = $contractRepository->findOneBy(["api_key" => $auth]);
 
-        $contract = $contractRepository->find($id);
+        if ($contract == null) {
+            return new Response('', 401);
+        }
 
-        $stationRepository = $entityManager->getRepository(Station::class);
-        $stationList = [];
+        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryStations()));
 
-        $query = $stationRepository
-            ->createQueryBuilder('u')
-            ->select('u');
-        if($contract->getMinLatitude() !== null && $contract->getMaxLatitude() !== null) 
-        {
-            $query = $query
-                ->andWhere('u.latitude > :min_latitude')
-                ->setParameter('min_latitude', $contract->getMinLatitude())
-                ->andWhere('u.latitude < :max_latitude')
-                ->setParameter('max_latitude', $contract->getMaxLatitude());
-        }
-        if($contract->getMinLongitude() !== null && $contract->getMaxLongitude() !== null) 
-        {
-            $query = $query
-                ->andWhere('u.longitude > :min_longitude')
-                ->setParameter('min_longitude', $contract->getMinLongitude())
-                ->andWhere('u.longitude < :max_longitude')
-                ->setParameter('max_longitude', $contract->getMaxLongitude());
-        }
-        if($contract->getMinElevation() !== null && $contract->getMaxElevation() !== null) 
-        {
-            $query = $query
-                ->andWhere('u.elevation > :min_elevation')
-                ->setParameter('min_elevation', $contract->getMinElevation())
-                ->andWhere('u.elevation < :max_elevation')
-                ->setParameter('max_elevation', $contract->getMaxElevation());
-        }
-        $stationList = $query->getQuery()->getResult();
+        $query = $entityManager->createQuery($contractQuery);
+        $stationList = $query->getArrayResult();
 
-        $jsonArr = array();
-        foreach ($stationList as $key => $value) {
-            array_push($jsonArr, array('stationId' => $value->getId(), 
-                                    'longitude' => $value->getLongitude(), 
-                                    'latitude' => $value->getLatitude()));
-        }
-        $json = json_encode($jsonArr);
-        return new JsonResponse($json, 200, [], true );
+        $json = json_encode($stationList);
+        return new JsonResponse($json, 200, [], true);
     }
 
-    #[Route('/api/station/{id}', name: 'app_api_station', methods: ['GET'])]
-    public function contractStation(Request $request,  EntityManagerInterface $entityManager, int $id,)
-    {
-        $stationRepository = $entityManager->getRepository(Station::class);
-        $station = $stationRepository->findOneBy(array('id' => $id));
-        $latestMeasurement = null;
 
-        foreach ($station->getMeasurements() as $measurement) {
-            $timestamp = $measurement->getTimestamp();
-            if($latestMeasurement == null || $timestamp > $latestMeasurement->getTimestamp()){
-                $latestMeasurement = $measurement;
-            }
+    #[Route('/api/contract/station/{id}/measurements', name: 'app_api_contract_station_measurements', methods: ['GET'])]
+    public function contractStationMeasurement(Request $request, EntityManagerInterface $entityManager, int $id, )
+    {
+        $auth = $request->headers->get("API-key");
+
+        $contractRepository = $entityManager->getRepository(Contract::class);
+        $contract = $contractRepository->findOneBy(["api_key" => $auth]);
+
+        if ($contract == null) {
+            return new Response('', 401);
         }
 
-        $jsonArr = 
-            [   
-                "station" => [
-                    "stationId" => $station->getId(),
-                    "longitude" => $station->getLongitude(),
-                    "latitude" => $station->getLatitude(),
-                    "measurement" => [
-                        "DATE" => $latestMeasurement->getTimestamp()->format('d-m-y'),
-                        "TIME"=> $latestMeasurement->getTimestamp()->format('H:i:s'),
-                        "TEMP" => $latestMeasurement->getTemperature(),
-                        "DEWP" => $latestMeasurement->getTemperature(),
-                        "STP" => $latestMeasurement->getStationAirPressure(),
-                        "SLP" => $latestMeasurement->getSeaLevelAirPressure(),
-                        "VISIB" => $latestMeasurement->getVisibility(),
-                        "WDSP" => $latestMeasurement->getWindSpeed(),
-                        "PRCP" => $latestMeasurement->getPrecipitation(),
-                        "SNDP" => $latestMeasurement->getSnowDepth(),
-                        "FRSHTT" => $latestMeasurement->getFRSHTT(),
-                        "CLDC" => $latestMeasurement->getCloudPercentage(),
-                        "WNDDIR" => $latestMeasurement->getWindDirection()
-                    ]
-                ]
-            ];
-        $json = json_encode($jsonArr);
-        return new JsonResponse($json, 200, [], true );
+        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryMeasurments()));
+        $Query = $entityManager->createQuery($contractQuery);
+        $Query->setParameters(["id" => $id]);
+        $result = $Query->getArrayResult();
+
+        return new JsonResponse($result, 200, [], false);
     }
 }
