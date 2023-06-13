@@ -181,4 +181,29 @@ class ApiController extends AbstractController
 
         return new JsonResponse($result, 200, [], false);
     }
+
+    #[Route('/api/contract/station/measurements/{timestamp}', name: 'app_api_contract_station_measurementss', methods: ['GET'])]
+    public function contractStationMeasurements(Request $request, EntityManagerInterface $entityManager, string $timestamp)
+    {
+        $auth = $request->headers->get("API-key");
+
+        $contractRepository = $entityManager->getRepository(Contract::class);
+        $contract = $contractRepository->findOneBy(["api_key" => $auth]);
+
+        if ($contract == null OR strlen($timestamp) != 10) {
+            return new Response('', 401);
+        }
+
+        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryMeasurments()));
+        $Query = $entityManager->createQuery($contractQuery);
+        $Query->setParameters(["timestamp" => $timestamp]);
+        $result = $Query->getArrayResult();
+
+        $array = [];
+        for($x = 0; $x < 10; $x++) {
+            array_push($array, $result[$x]);
+        }
+
+        return new JsonResponse($array, 200, [], false);
+    }
 }
