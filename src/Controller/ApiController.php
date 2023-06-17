@@ -218,7 +218,7 @@ class ApiController extends AbstractController
             }
         }
 
-        // veranderen naar sorteren op station_air_pressure
+        // veranderen naar sorteren op station_air_pressure 
         usort($measurements, function($a, $b) {
             return $a['wind_speed'] < $b['wind_speed'];
         });
