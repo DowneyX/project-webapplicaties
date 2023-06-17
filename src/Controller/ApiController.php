@@ -161,6 +161,48 @@ class ApiController extends AbstractController
         return new JsonResponse($json, 200, [], true);
     }
 
+    #[Route('/api/contract/all/measurements', name: 'app_api_contract_poopy', methods: ['GET'])]
+    public function poopy(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $auth = $request->headers->get("API-key");
+
+        $contractRepository = $entityManager->getRepository(Contract::class);
+        $contract = $contractRepository->findOneBy(["api_key" => $auth]);
+
+        if ($contract == null) {
+            return new Response('', 401);
+        }
+
+        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryStations()));
+
+        $query = $entityManager->createQuery($contractQuery);
+        $stationList = $query->getArrayResult();
+
+        $returnArray = [];
+        foreach ($stationList as $key => $station) {
+
+            $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryMeasurments()));
+            $Query = $entityManager->createQuery(
+                $contractQuery
+            );
+            $Query->setParameters(["id" => $station["id"]]);
+            $result = $Query->getArrayResult();
+
+            foreach ($result as $key => $value) {
+                $returnArray[] = [
+                    "station" => $value["0"],
+                    "timestamp" => $value["timestamp"],
+                    "station_air_pressure" => $value["station_air_pressure"],
+                    "sea_level_air_pressure" => $value["sea_level_air_pressure"]
+                ];
+            }
+            //$returnArray[] = $result;
+        }
+
+        $json = json_encode($returnArray);
+        return new JsonResponse($json, 200, [], true);
+    }
+
 
     #[Route('/api/contract/station/{id}/measurements', name: 'app_api_contract_station_measurements', methods: ['GET'])]
     public function contractStationMeasurement(Request $request, EntityManagerInterface $entityManager, int $id, )
