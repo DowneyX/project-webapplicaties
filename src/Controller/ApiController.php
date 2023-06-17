@@ -182,28 +182,52 @@ class ApiController extends AbstractController
         return new JsonResponse($result, 200, [], false);
     }
 
-    #[Route('/api/contract/station/measurements/{timestamp}', name: 'app_api_contract_station_measurementss', methods: ['GET'])]
-    public function contractStationMeasurements(Request $request, EntityManagerInterface $entityManager, string $timestamp)
+    #[Route('/api/contract/station/{date}/measurementss', name: 'app_api_contract_station_measurementss', methods: ['GET'])]
+    public function contractStationssMeasurement(Request $request, EntityManagerInterface $entityManager, string $date, )
     {
         $auth = $request->headers->get("API-key");
 
         $contractRepository = $entityManager->getRepository(Contract::class);
         $contract = $contractRepository->findOneBy(["api_key" => $auth]);
 
-        if ($contract == null OR strlen($timestamp) != 10) {
+        if ($contract == null) {
             return new Response('', 401);
         }
 
-        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryMeasurments()));
-        $Query = $entityManager->createQuery($contractQuery);
-        $Query->setParameters(["timestamp" => $timestamp]);
-        $result = $Query->getArrayResult();
+        $contractQuery = htmlspecialchars_decode(Strip_tags($contract->getQueryStations()));
 
-        $array = [];
-        for($x = 0; $x < 10; $x++) {
-            array_push($array, $result[$x]);
+        $query = $entityManager->createQuery($contractQuery);
+        $stationList = $query->getArrayResult();
+
+        $ids = array_column($stationList, 'id');
+
+        $measurements = array();
+
+        for ($x=0; $x < count($ids); $x++) {
+            settype($ids[$x], 'integer');
+            $contract2Query = htmlspecialchars_decode(Strip_tags($contract->getQueryMeasurments()));
+            $Query2 = $entityManager->createQuery($contract2Query);
+            $Query2->setParameters(["id" => $ids[$x]]);
+            $result = $Query2->getArrayResult();
+            for ($y=0; $y < count($result); $y++) {
+                $dateTime = $result[$y]['timestamp']; 
+                $dateStation = $dateTime->format('Y-m-d');
+                if ($dateStation == $date) {
+                    array_push($measurements, $result[$y]);
+                }
+            }
         }
 
-        return new JsonResponse($array, 200, [], false);
+        // veranderen naar sorteren op station_air_pressure
+        usort($measurements, function($a, $b) {
+            return $a['wind_speed'] < $b['wind_speed'];
+        });
+
+        $measurementData = array();
+        for ($c=0; $c < 10; $c++) {
+            array_push($measurementData, $measurements[$c]);
+        }
+
+        return new JsonResponse($measurementData, 200, [], false);
     }
 }
